@@ -1,0 +1,2312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="TAVOLA! Gamified English for restaurant service - Tri-Language Teaching Academy">
+<meta name="theme-color" content="#43C059">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="TAVOLA!">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8D%BD%EF%B8%8F%3C/text%3E%3C/svg%3E">
+<title>TAVOLA! — English for Restaurant Service</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:ital,wght@0,400;0,600;0,700;0,800;1,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --green:#43C059; --green-edge:#2C9440;
+  --tomato:#FF7A33; --tomato-edge:#D2551A;
+  --yellow:#FFC42E; --yellow-edge:#DC9F00;
+  --grape:#A566FF; --grape-edge:#7A3CD6;
+  --sky:#22B8E0; --sky-edge:#1590B4;
+  --rose:#FF5C7A; --rose-edge:#D22F50;
+  --ink:#3B2A20; --ink-soft:#7A6357;
+  --bg:#FFF8EF; --bg-2:#FFEFDC; --card:#FFFFFF; --line:#E7D8C6;
+  --locked:#D9CBBC; --locked-edge:#BBAA99;
+  --shadow:0 6px 0; --radius:22px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ink:#FFF3E4; --ink-soft:#C8B3A3;
+    --bg:#1B1410; --bg-2:#241A14; --card:#2B211A; --line:#46372D;
+    --locked:#3B2E26; --locked-edge:#2A211B;
+  }
+}
+:root[data-theme="dark"]{
+  --ink:#FFF3E4; --ink-soft:#C8B3A3;
+  --bg:#1B1410; --bg-2:#241A14; --card:#2B211A; --line:#46372D;
+  --locked:#3B2E26; --locked-edge:#2A211B;
+}
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{
+  background:var(--bg); color:var(--ink);
+  font-family:Nunito,"Trebuchet MS",system-ui,sans-serif; font-weight:700;
+  font-size:17px; line-height:1.45; overflow-x:hidden;
+}
+h1,h2,h3,.fred{font-family:Fredoka,Nunito,sans-serif; font-weight:600; letter-spacing:.3px; margin:0}
+button{font-family:inherit; font-weight:800; color:inherit}
+:focus-visible{outline:4px solid var(--sky); outline-offset:3px; border-radius:14px}
+
+/* ---------- chunky button ---------- */
+.btn{
+  border:3px solid var(--ink); border-radius:999px; padding:14px 26px;
+  font-size:17px; cursor:pointer; background:var(--card); color:var(--ink);
+  box-shadow:var(--shadow) var(--line); transform:translateY(0);
+  transition:transform .06s ease, box-shadow .06s ease, filter .15s ease;
+  display:inline-flex; align-items:center; gap:10px; justify-content:center;
+  min-height:54px; user-select:none;
+}
+.btn:active{transform:translateY(5px); box-shadow:0 1px 0 var(--line)}
+.btn.green{background:var(--green); box-shadow:var(--shadow) var(--green-edge); color:#12220F}
+.btn.green:active{box-shadow:0 1px 0 var(--green-edge)}
+.btn.tomato{background:var(--tomato); box-shadow:var(--shadow) var(--tomato-edge); color:#331100}
+.btn.tomato:active{box-shadow:0 1px 0 var(--tomato-edge)}
+.btn.grape{background:var(--grape); box-shadow:var(--shadow) var(--grape-edge); color:#1D0B33}
+.btn.grape:active{box-shadow:0 1px 0 var(--grape-edge)}
+.btn.sky{background:var(--sky); box-shadow:var(--shadow) var(--sky-edge); color:#04252E}
+.btn.sky:active{box-shadow:0 1px 0 var(--sky-edge)}
+.btn.yellow{background:var(--yellow); box-shadow:var(--shadow) var(--yellow-edge); color:#3A2600}
+.btn.yellow:active{box-shadow:0 1px 0 var(--yellow-edge)}
+.btn[disabled]{opacity:.45; cursor:not-allowed; transform:none; box-shadow:var(--shadow) var(--line)}
+.btn.big{width:100%; font-size:19px; padding:16px 26px; min-height:62px}
+.btn.ghost{background:transparent; border-color:var(--line); box-shadow:none; color:var(--ink-soft)}
+.btn.tiny{padding:8px 16px; min-height:42px; font-size:14px; box-shadow:0 4px 0 var(--line)}
+
+/* ---------- layout ---------- */
+.wrap{max-width:820px; margin:0 auto; padding:0 16px 140px}
+.topbar{
+  position:sticky; top:0; z-index:40; background:var(--bg);
+  border-bottom:3px solid var(--line); padding:10px 16px;
+}
+.topbar .inner{max-width:820px; margin:0 auto; display:flex; align-items:center; gap:12px; flex-wrap:wrap}
+.stat{display:flex; align-items:center; gap:6px; font-size:16px; font-weight:800; white-space:nowrap}
+.stat .num{font-family:Fredoka}
+.wordmark{display:flex; align-items:center; gap:8px; margin-right:auto; cursor:pointer; background:none; border:0; padding:0}
+
+/* ---------- cards ---------- */
+.card{
+  background:var(--card); border:3px solid var(--line); border-radius:var(--radius);
+  padding:18px; box-shadow:0 6px 0 var(--line);
+}
+.card.flat{box-shadow:none}
+.pill{
+  display:inline-flex; align-items:center; gap:6px; border-radius:999px;
+  padding:5px 14px; font-size:13px; font-weight:800; border:3px solid transparent;
+}
+
+/* ---------- path ---------- */
+.unitbar{
+  border-radius:20px; padding:14px 18px; color:#fff; border:3px solid var(--ink);
+  display:flex; align-items:center; gap:14px; box-shadow:0 6px 0 rgba(0,0,0,.25); margin:26px 0 6px;
+}
+.path{display:flex; flex-direction:column; align-items:center; gap:4px; position:relative}
+.node{
+  width:92px; height:86px; border-radius:50%/46%; border:4px solid var(--ink);
+  display:grid; place-items:center; cursor:pointer; position:relative;
+  box-shadow:0 9px 0 var(--nedge, var(--green-edge)); background:var(--ncol, var(--green));
+  transition:transform .08s ease, box-shadow .08s ease;
+}
+.node:active{transform:translateY(7px); box-shadow:0 2px 0 var(--nedge, var(--green-edge))}
+.node.locked{background:var(--locked); box-shadow:0 9px 0 var(--locked-edge); cursor:not-allowed}
+.node.locked:active{transform:none; box-shadow:0 9px 0 var(--locked-edge)}
+.node .emoji{font-size:38px; filter:drop-shadow(0 2px 0 rgba(0,0,0,.15))}
+.node .crowns{position:absolute; bottom:-14px; background:var(--card); border:3px solid var(--line);
+  border-radius:999px; font-size:12px; padding:1px 9px; white-space:nowrap}
+.nodewrap{display:flex; align-items:center; gap:14px; padding:14px 0}
+.nodelabel{max-width:230px; font-size:15px; color:var(--ink-soft)}
+.nodelabel b{display:block; color:var(--ink); font-size:17px; font-family:Fredoka; font-weight:600}
+.bounce{animation:bounce 2.4s ease-in-out infinite}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+.startflag{
+  position:absolute; top:-18px; left:50%; transform:translateX(-50%);
+  background:var(--card); border:3px solid var(--line); border-radius:999px;
+  padding:2px 12px; font-size:12px; color:var(--ink-soft); white-space:nowrap
+}
+
+/* ---------- progress ---------- */
+.bar{height:22px; border-radius:999px; background:var(--line); overflow:hidden; border:3px solid var(--ink); flex:1}
+.bar > div{height:100%; background:var(--green); border-radius:999px; transition:width .35s cubic-bezier(.3,1.4,.5,1);
+  box-shadow:inset 0 -6px 0 rgba(0,0,0,.12), inset 0 6px 0 rgba(255,255,255,.35)}
+.xpbar{height:14px; border-radius:999px; background:var(--line); overflow:hidden; border:2px solid var(--ink)}
+.xpbar > div{height:100%; background:var(--yellow)}
+
+/* ---------- exercise ---------- */
+.choice{
+  width:100%; text-align:left; background:var(--card); border:3px solid var(--line);
+  border-radius:18px; padding:14px 18px; font-size:17px; cursor:pointer;
+  box-shadow:0 5px 0 var(--line); transition:transform .06s, box-shadow .06s, background .12s, border-color .12s;
+  display:flex; gap:12px; align-items:center;
+}
+.choice:active{transform:translateY(4px); box-shadow:0 1px 0 var(--line)}
+.choice.sel{border-color:var(--sky); background:color-mix(in srgb, var(--sky) 16%, var(--card)); box-shadow:0 5px 0 var(--sky-edge)}
+.choice.ok{border-color:var(--green); background:color-mix(in srgb, var(--green) 20%, var(--card)); box-shadow:0 5px 0 var(--green-edge)}
+.choice.no{border-color:var(--rose); background:color-mix(in srgb, var(--rose) 18%, var(--card)); box-shadow:0 5px 0 var(--rose-edge)}
+.key{width:30px; height:30px; flex:0 0 30px; border:3px solid var(--line); border-radius:9px;
+  display:grid; place-items:center; font-size:13px; color:var(--ink-soft)}
+.chip{
+  border:3px solid var(--line); border-radius:999px; padding:9px 18px; background:var(--card);
+  box-shadow:0 5px 0 var(--line); cursor:pointer; font-size:16px; font-weight:800;
+}
+.chip:active{transform:translateY(4px); box-shadow:0 1px 0 var(--line)}
+.chip.used{opacity:.3; pointer-events:none}
+.blank{
+  display:inline-block; min-width:120px; border-bottom:4px solid var(--sky);
+  text-align:center; padding:0 8px; color:var(--sky); font-weight:800;
+}
+.footerbar{
+  position:fixed; left:0; right:0; bottom:0; z-index:50; border-top:3px solid var(--line);
+  background:var(--bg); padding:14px 16px calc(14px + env(safe-area-inset-bottom));
+}
+.footerbar .inner{max-width:820px; margin:0 auto; display:flex; gap:14px; align-items:center}
+.verdict{border-radius:20px 20px 0 0; padding:16px; margin:-14px -16px 12px; border-top:3px solid}
+.verdict.ok{background:color-mix(in srgb, var(--green) 22%, var(--bg)); border-color:var(--green)}
+.verdict.no{background:color-mix(in srgb, var(--rose) 20%, var(--bg)); border-color:var(--rose)}
+.speech{
+  position:relative; background:var(--card); border:3px solid var(--line); border-radius:20px; padding:14px 16px;
+}
+.speech:after{content:""; position:absolute; left:-12px; top:22px; width:20px; height:20px;
+  background:var(--card); border-left:3px solid var(--line); border-bottom:3px solid var(--line);
+  transform:rotate(45deg); border-radius:0 0 0 6px}
+.shake{animation:shake .4s}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-9px)}40%{transform:translateX(9px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}
+.pop{animation:pop .35s cubic-bezier(.2,1.6,.4,1)}
+@keyframes pop{0%{transform:scale(.7)}60%{transform:scale(1.12)}100%{transform:scale(1)}}
+.slidein{animation:slidein .3s ease both}
+@keyframes slidein{from{opacity:0; transform:translateY(14px)}to{opacity:1; transform:none}}
+.pulse{animation:pulse 1.1s ease-in-out infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+.spin{animation:spin 1.1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion: reduce){
+  *{animation:none !important; transition:none !important}
+}
+#confetti{position:fixed; inset:0; pointer-events:none; z-index:90}
+.grid{display:grid; gap:12px}
+.g2{grid-template-columns:1fr 1fr}
+@media (max-width:520px){ .g2{grid-template-columns:1fr} .node{width:80px;height:76px} .wrap{padding-bottom:150px} }
+.badge{
+  display:grid; place-items:center; gap:6px; text-align:center; padding:14px 8px;
+  border:3px solid var(--line); border-radius:20px; background:var(--card); font-size:12px;
+}
+.badge.off{opacity:.38; filter:grayscale(1)}
+.badge .ico{font-size:34px}
+.row{display:flex; align-items:center; gap:12px}
+.muted{color:var(--ink-soft); font-weight:600}
+.small{font-size:14px}
+table.pb{width:100%; border-collapse:collapse; font-size:15px}
+table.pb th,table.pb td{border:2px solid var(--line); padding:8px 10px; text-align:left; vertical-align:top}
+table.pb th{background:var(--bg-2); font-family:Fredoka; font-weight:600}
+.aibox{border:3px dashed var(--grape); border-radius:20px; padding:14px; background:color-mix(in srgb, var(--grape) 8%, var(--card))}
+.bubble{border:3px solid var(--line); border-radius:20px; padding:10px 14px; margin:8px 0; max-width:86%}
+.bubble.me{margin-left:auto; background:color-mix(in srgb, var(--sky) 18%, var(--card)); border-color:var(--sky)}
+.bubble.guest{background:var(--card)}
+input[type=text],textarea,select{
+  font-family:inherit; font-weight:700; font-size:16px; color:var(--ink); background:var(--card);
+  border:3px solid var(--line); border-radius:16px; padding:12px 14px; width:100%;
+}
+.printonly{display:none}
+@media print{
+  .topbar,.footerbar,.btn,.node,#confetti,.noprint,.choice,.chip{display:none !important}
+  .printonly{display:block !important}
+  body{background:#fff; color:#000; font-size:12pt}
+  .card{box-shadow:none; border-color:#999; break-inside:avoid}
+  table.pb th,table.pb td{border-color:#999}
+  .answerkey{display:none !important}
+  @page{margin:14mm}
+}
+</style>
+</head>
+<body>
+<div id="root"><div style="padding:40px;text-align:center;font-family:sans-serif">Loading TAVOLA!…</div></div>
+<canvas id="confetti"></canvas>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+<script>
+/* ============================================================
+   TAVOLA! — English for Restaurant Service
+   A gamified learning app for Italian hospitality professionals.
+   Tri-Language Teaching Academy
+   ============================================================ */
+(function(){
+"use strict";
+var h = React.createElement;
+var useState = React.useState, useEffect = React.useEffect,
+    useRef = React.useRef, useMemo = React.useMemo, useCallback = React.useCallback;
+
+/* ---------------------------------------------------------- DATA */
+
+var LESSONS = [
+{
+  id:"l1", unit:1, title:"Welcome to the table", it:"Accogliere e far accomodare gli ospiti",
+  who:"host", col:"green", icon:"\uD83D\uDEAA", scene:"door",
+  phrases:[
+    {en:"Good evening! Do you have a reservation?", it:"Buonasera! Avete una prenotazione?"},
+    {en:"A table for two?", it:"Un tavolo per due?"},
+    {en:"Follow me, please.", it:"Mi segua, prego."},
+    {en:"Would you prefer inside or outside?", it:"Preferite dentro o fuori?"},
+    {en:"I am afraid we are fully booked.", it:"Purtroppo siamo al completo."},
+    {en:"The wait is about fifteen minutes.", it:"L'attesa e di circa quindici minuti."}
+  ],
+  ex:[
+    {t:"mcq", scene:"door", q:"Two guests walk in at 8 pm. What do you say first?",
+     it:"Due ospiti entrano alle 20. Cosa dici per primo?",
+     opts:["Good evening! Do you have a reservation?","Hello, what do you want?","Yes? Sit down, please.","Good night! You are late."],
+     a:0, why:"Greet first, then check the booking. 'Good night' is only for leaving."},
+    {t:"gap", scene:"table", q:"Would you like a table ___ the window or near the kitchen?",
+     it:"Vicino alla finestra oppure vicino alla cucina?",
+     bank:["by","on","in","of"], a:"by",
+     why:"We say 'a table by the window' - 'by' means next to."},
+    {t:"listen", say:"I am sorry, we are fully booked tonight. The wait is about twenty minutes.",
+     q:"What is the situation?",
+     opts:["The restaurant is full and the guest must wait about 20 minutes.","The restaurant is closed for twenty minutes.","The kitchen closes in twenty minutes.","The guest booked a table for twenty people."],
+     a:0, why:"'Fully booked' = tutto prenotato. 'The wait' = l'attesa."},
+    {t:"speak", say:"Good evening! Follow me, please. Your table is ready.",
+     it:"Buonasera! Mi segua, prego. Il vostro tavolo e pronto."},
+    {t:"match", q:"Match the English with the Italian.",
+     pairs:[["Do you have a reservation?","Avete una prenotazione?"],["Follow me, please.","Mi segua, prego."],["We are fully booked.","Siamo al completo."],["Take a seat at the bar.","Si accomodi al bancone."]]}
+  ]
+},
+{
+  id:"l2", unit:1, title:"Drinks first", it:"Prendere l'ordine delle bevande",
+  who:"waitress", col:"sky", icon:"\uD83E\uDD5B", scene:"drinks",
+  phrases:[
+    {en:"Can I get you something to drink?", it:"Posso portarvi qualcosa da bere?"},
+    {en:"Still or sparkling water?", it:"Acqua naturale o frizzante?"},
+    {en:"We have it by the glass or by the bottle.", it:"L'abbiamo al bicchiere o in bottiglia."},
+    {en:"Would you like ice with that?", it:"Desidera del ghiaccio?"},
+    {en:"I will be right back with your drinks.", it:"Torno subito con le bevande."},
+    {en:"Shall I bring some bread while you decide?", it:"Porto del pane mentre decidete?"}
+  ],
+  ex:[
+    {t:"mcq", scene:"drinks", q:"The guest asks for water. Which question do you ask next?",
+     it:"L'ospite chiede acqua. Quale domanda fai?",
+     opts:["Still or sparkling?","Natural or with gas?","Water normal or water bubbles?","Do you want plain water, no?"],
+     a:0, why:"In English restaurants the standard pair is 'still or sparkling'."},
+    {t:"gap", scene:"drinks", q:"We have the house red ___ the glass or by the bottle.",
+     it:"Abbiamo il rosso della casa al bicchiere o in bottiglia.",
+     bank:["by","with","for","at"], a:"by",
+     why:"'By the glass / by the bottle' is the fixed expression."},
+    {t:"listen", say:"Could I have a sparkling water with no ice, and a glass of the house white, please?",
+     q:"What does the guest want?",
+     opts:["Sparkling water without ice and a glass of house white wine.","Still water with ice and a bottle of white wine.","Sparkling water with lemon and a beer.","Two glasses of red wine."],
+     a:0, why:"'No ice' = senza ghiaccio. 'House white' = vino bianco della casa."},
+    {t:"speak", say:"Can I get you something to drink while you look at the menu?",
+     it:"Posso portarvi qualcosa da bere mentre guardate il menu?"},
+    {t:"order", q:"Put the drinks service in the right order.",
+     lines:["Good evening. Can I get you something to drink?","Yes, a sparkling water, please.","Still or sparkling for you, madam?","Still, please. And a glass of red wine.","Of course. I will be right back with your drinks."]}
+  ]
+},
+{
+  id:"l3", unit:1, title:"Taking the order", it:"Prendere l'ordinazione",
+  who:"waitress", col:"tomato", icon:"\uD83D\uDCDD", scene:"notepad",
+  phrases:[
+    {en:"Are you ready to order?", it:"Siete pronti per ordinare?"},
+    {en:"Would you like a starter?", it:"Desidera un antipasto?"},
+    {en:"And for your main course?", it:"E come secondo?"},
+    {en:"How would you like your steak?", it:"Come desidera la bistecca?"},
+    {en:"Anything else for you?", it:"Altro per lei?"},
+    {en:"Let me repeat that back to you.", it:"Le ripeto l'ordine."}
+  ],
+  ex:[
+    {t:"mcq", scene:"notepad", q:"A guest orders a steak. What must you always ask?",
+     it:"Un ospite ordina una bistecca. Cosa devi sempre chiedere?",
+     opts:["How would you like it cooked?","Do you want it hot?","Is the meat good for you?","How much meat do you eat?"],
+     a:0, why:"Rare - medium rare - medium - well done. Always ask."},
+    {t:"gap", scene:"notepad", q:"Would you like a starter ___ your main course?",
+     it:"Desidera un antipasto prima del secondo?",
+     bank:["before","after","under","between"], a:"before",
+     why:"The starter comes before the main course."},
+    {t:"listen", say:"For me the soup to start, then the grilled sea bass, and a side of roast potatoes.",
+     q:"What is the guest's main course?",
+     opts:["Grilled sea bass","Soup","Roast potatoes","Grilled steak"],
+     a:0, why:"'To start' = the starter. The main course is the sea bass; the potatoes are a side dish."},
+    {t:"speak", say:"Are you ready to order, or would you like a few more minutes?",
+     it:"Siete pronti per ordinare o desiderate ancora qualche minuto?"},
+    {t:"mcq", scene:"notepad", q:"You did not understand the order. What is the politest thing to say?",
+     it:"Non hai capito l'ordine. Cosa dici?",
+     opts:["Sorry, could you repeat that, please?","What? Again.","I do not understand you.","Speak slowly, please, my English is bad."],
+     a:0, why:"'Could you repeat that, please?' is polite and professional."},
+    {t:"match", q:"Match the course with the Italian.",
+     pairs:[["starter","antipasto"],["main course","secondo"],["side dish","contorno"],["dessert","dolce"]]}
+  ]
+},
+{
+  id:"l4", unit:2, title:"Describing the dish", it:"Descrivere i piatti e consigliare",
+  who:"chef", col:"yellow", icon:"\uD83D\uDC68\u200D\uD83C\uDF73", scene:"plate",
+  phrases:[
+    {en:"It is a local speciality.", it:"E una specialita locale."},
+    {en:"It comes with roast potatoes and salad.", it:"E servito con patate al forno e insalata."},
+    {en:"It is grilled, not fried.", it:"E alla griglia, non fritto."},
+    {en:"It is quite rich but not spicy.", it:"E piuttosto ricco ma non piccante."},
+    {en:"I would recommend the sea bass.", it:"Le consiglierei il branzino."},
+    {en:"It goes really well with a dry white wine.", it:"Si abbina benissimo con un bianco secco."}
+  ],
+  ex:[
+    {t:"mcq", scene:"plate", q:"A guest asks: 'What exactly is trofie al pesto?' Which answer is best?",
+     it:"Quale risposta e la migliore?",
+     opts:["It is a local speciality: short twisted pasta with basil sauce, potatoes and green beans.","It is pasta with green sauce, very typical, you will like it.","Pasta. Very good. Ligurian.","It is difficult to explain, it is Italian food."],
+     a:0, why:"Name the type of dish, then the main ingredients. Short and clear."},
+    {t:"gap", scene:"plate", q:"The lamb ___ with roast potatoes and seasonal vegetables.",
+     it:"L'agnello e servito con patate e verdure di stagione.",
+     bank:["comes","arrives","brings","goes"], a:"comes",
+     why:"'It comes with...' = e servito con. 'What does it come with?' is the guest's question."},
+    {t:"listen", say:"It is a light dish. The fish is grilled, not fried, and it comes with a green salad.",
+     q:"How is the fish cooked?",
+     opts:["Grilled","Fried","Boiled","Raw"],
+     a:0, why:"grilled = alla griglia; fried = fritto; boiled = bollito."},
+    {t:"speak", say:"I would recommend the sea bass. It is grilled and it goes really well with a dry white wine.",
+     it:"Le consiglio il branzino. E alla griglia e si abbina bene con un bianco secco."},
+    {t:"match", q:"Match the cooking word with the Italian.",
+     pairs:[["grilled","alla griglia"],["baked","al forno"],["stuffed","ripieno"],["smoked","affumicato"],["stewed","in umido"]]}
+  ]
+},
+{
+  id:"l5", unit:2, title:"Allergies and diets", it:"Allergie, intolleranze e diete",
+  who:"chef", col:"rose", icon:"\uD83E\uDD5C", scene:"allergy",
+  phrases:[
+    {en:"Do you have any allergies or dietary requirements?", it:"Avete allergie o esigenze alimentari?"},
+    {en:"It contains nuts.", it:"Contiene frutta secca."},
+    {en:"It is suitable for vegans.", it:"E adatto ai vegani."},
+    {en:"It is gluten-free.", it:"E senza glutine."},
+    {en:"Let me check with the chef.", it:"Chiedo conferma allo chef."},
+    {en:"We can prepare it without cream.", it:"Possiamo prepararlo senza panna."}
+  ],
+  ex:[
+    {t:"mcq", scene:"allergy", q:"A guest says: 'I have a serious nut allergy.' What do you do?",
+     it:"Un ospite ha una grave allergia alla frutta secca. Cosa fai?",
+     opts:["Say you will check every dish with the chef before serving anything.","Say probably there are no nuts in the pasta.","Tell the guest to choose the salad.","Say the kitchen is very clean, no problem."],
+     a:0, why:"Never guess with allergies. Always check with the kitchen and confirm."},
+    {t:"gap", scene:"allergy", q:"I am afraid the sauce ___ butter, but we can prepare it with olive oil.",
+     it:"La salsa contiene burro, ma possiamo prepararla con olio.",
+     bank:["contains","has got inside","is with","includes in"], a:"contains",
+     why:"'Contains' is the standard word on menus and allergy information."},
+    {t:"listen", say:"I am vegan, so no meat, no fish, no eggs and no dairy. Is the risotto suitable for me?",
+     q:"What can this guest NOT eat?",
+     opts:["Meat, fish, eggs and dairy products","Only meat","Only fish and seafood","Bread and pasta"],
+     a:0, why:"vegan = niente prodotti animali. dairy = latticini."},
+    {t:"speak", say:"Do you have any allergies or dietary requirements I should tell the kitchen about?",
+     it:"Avete allergie o esigenze alimentari da segnalare alla cucina?"},
+    {t:"mcq", scene:"allergy", q:"Which dish is suitable for a coeliac guest (gluten-free)?",
+     it:"Quale piatto e adatto a un celiaco?",
+     opts:["Grilled sea bass with roast potatoes","Pasta with tomato sauce","Breaded chicken","Pizza margherita"],
+     a:0, why:"Pasta, breadcrumbs and pizza dough all contain gluten."},
+    {t:"match", q:"Match the allergen with the Italian.",
+     pairs:[["nuts","frutta secca"],["shellfish","crostacei"],["dairy","latticini"],["gluten","glutine"],["eggs","uova"]]}
+  ]
+},
+{
+  id:"l6", unit:2, title:"Table and special requests", it:"Mise en place e richieste speciali",
+  who:"waitress", col:"grape", icon:"\uD83C\uDF74", scene:"cutlery",
+  phrases:[
+    {en:"Could I have some more cutlery, please?", it:"Potrei avere altre posate?"},
+    {en:"Here is a clean napkin.", it:"Ecco un tovagliolo pulito."},
+    {en:"I will bring an extra plate right away.", it:"Porto subito un piatto in piu."},
+    {en:"Would you like us to split the dish?", it:"Desiderate che dividiamo il piatto?"},
+    {en:"Can we have a high chair for the little one?", it:"Possiamo avere un seggiolone per il bambino?"},
+    {en:"Of course, no problem at all.", it:"Certamente, nessun problema."}
+  ],
+  ex:[
+    {t:"mcq", scene:"cutlery", q:"The guest dropped a fork on the floor. What do you say?",
+     it:"L'ospite ha fatto cadere una forchetta. Cosa dici?",
+     opts:["No problem, I will bring you clean cutlery right away.","Take another fork there, please.","It is not my fault, sorry.","You must be careful with the forks."],
+     a:0, why:"Offer the solution immediately: 'right away' = subito."},
+    {t:"gap", scene:"cutlery", q:"Could we have an ___ plate, please? We would like to share.",
+     it:"Potremmo avere un piatto in piu? Vorremmo condividere.",
+     bank:["extra","other","more","plus"], a:"extra",
+     why:"'An extra plate' = un piatto in piu. 'Another plate' also works, but 'more plate' does not."},
+    {t:"listen", say:"Excuse me, could we have a high chair for the baby and two extra napkins?",
+     q:"What does the family need?",
+     opts:["A high chair and two extra napkins","A baby menu and two forks","A bigger table and a napkin","A high chair and a bottle of water"],
+     a:0, why:"high chair = seggiolone; napkin = tovagliolo."},
+    {t:"speak", say:"Of course. I will bring you clean cutlery and a fresh napkin right away.",
+     it:"Certamente. Le porto subito posate pulite e un tovagliolo fresco."},
+    {t:"match", q:"Match the table item with the Italian.",
+     pairs:[["cutlery","posate"],["napkin","tovagliolo"],["side plate","piattino"],["tablecloth","tovaglia"],["tray","vassoio"]]}
+  ]
+},
+{
+  id:"l7", unit:3, title:"When something goes wrong", it:"Gestire lamentele e problemi",
+  who:"host", col:"tomato", icon:"\uD83D\uDD25", scene:"complaint",
+  phrases:[
+    {en:"I am so sorry about that.", it:"Mi dispiace molto."},
+    {en:"Let me take that back to the kitchen.", it:"Lo riporto subito in cucina."},
+    {en:"I will speak to the manager straight away.", it:"Parlo subito con il responsabile."},
+    {en:"Can I offer you a dessert on the house?", it:"Posso offrirle un dolce in omaggio?"},
+    {en:"Thank you for letting us know.", it:"Grazie per avercelo segnalato."},
+    {en:"I am afraid there has been a mix-up with the orders.", it:"Purtroppo c'e stato uno scambio di ordini."}
+  ],
+  ex:[
+    {t:"mcq", scene:"complaint", q:"A guest says the soup is cold. What is the best first reply?",
+     it:"Un ospite dice che la zuppa e fredda. Qual e la prima risposta migliore?",
+     opts:["I am so sorry about that. Let me take it back to the kitchen right away.","It is normal, the soup is served warm.","Are you sure? It was hot before.","You can eat it, it is fine."],
+     a:0, why:"Apologise first, then act. Never argue with the guest."},
+    {t:"gap", scene:"complaint", q:"Thank you for ___ us know. I will fix it immediately.",
+     it:"Grazie per averlo segnalato. Risolvo subito.",
+     bank:["letting","making","saying","telling"], a:"letting",
+     why:"'Thank you for letting us know' is the fixed polite formula."},
+    {t:"listen", say:"Excuse me, this is not what I ordered. I asked for the chicken, not the pork.",
+     q:"What is the problem?",
+     opts:["The guest received the wrong dish.","The dish is cold.","The dish is too salty.","The guest is still waiting."],
+     a:0, why:"'This is not what I ordered' = non e quello che ho ordinato."},
+    {t:"speak", say:"I am so sorry about that. Let me take it back to the kitchen and bring you a fresh one.",
+     it:"Mi dispiace molto. Lo riporto in cucina e le porto subito un piatto nuovo."},
+    {t:"order", q:"Put the complaint conversation in the right order.",
+     lines:["Excuse me, my steak is well done, but I asked for medium rare.","I am so sorry about that. Let me take it back to the kitchen.","How long will the new one take?","About ten minutes. Can I bring you a glass of wine while you wait?","That is very kind, thank you."]}
+  ]
+},
+{
+  id:"l8", unit:3, title:"Dessert, coffee and a little more", it:"Dolci, caffe e upselling",
+  who:"waitress", col:"grape", icon:"\uD83C\uDF70", scene:"dessert",
+  phrases:[
+    {en:"Can I tempt you with a dessert?", it:"Posso tentarvi con un dolce?"},
+    {en:"Our tiramisu is homemade.", it:"Il nostro tiramisu e fatto in casa."},
+    {en:"Would you like coffee or a digestive?", it:"Desidera un caffe o un digestivo?"},
+    {en:"I am afraid we are out of cheesecake tonight.", it:"Purtroppo il cheesecake e finito stasera."},
+    {en:"Would you like to share one between two?", it:"Desiderate dividerne uno in due?"},
+    {en:"Just the bill, then? Of course.", it:"Solo il conto, allora? Certamente."}
+  ],
+  ex:[
+    {t:"mcq", scene:"dessert", q:"There is no more panna cotta. What do you say?",
+     it:"La panna cotta e finita. Cosa dici?",
+     opts:["I am afraid we are out of panna cotta tonight, but the tiramisu is homemade.","The panna cotta is finished.","No panna cotta. Sorry.","We do not have. Take tiramisu."],
+     a:0, why:"'We are out of...' + immediately offer an alternative."},
+    {t:"gap", scene:"dessert", q:"Can I ___ you with a homemade dessert?",
+     it:"Posso tentarvi con un dolce fatto in casa?",
+     bank:["tempt","invite","propose","offer to"], a:"tempt",
+     why:"'Can I tempt you with...?' is a warm, natural upselling phrase."},
+    {t:"listen", say:"No dessert for me, thank you, I am completely full. Just an espresso and the bill, please.",
+     q:"What does the guest want?",
+     opts:["An espresso and the bill","A dessert and a coffee","Only the bill","A coffee with milk"],
+     a:0, why:"'I am completely full' = sono pienissimo."},
+    {t:"speak", say:"Can I tempt you with a dessert? Our tiramisu is homemade and it is our speciality.",
+     it:"Posso tentarvi con un dolce? Il tiramisu e fatto in casa ed e la nostra specialita."},
+    {t:"match", q:"Match the phrase with the Italian.",
+     pairs:[["We are out of it.","E finito."],["homemade","fatto in casa"],["on the house","offerto dalla casa"],["Shall I bring the bill?","Porto il conto?"]]}
+  ]
+},
+{
+  id:"l9", unit:3, title:"The bill and the tip", it:"Il conto, la mancia e il pagamento",
+  who:"host", col:"green", icon:"\uD83D\uDCB3", scene:"bill",
+  phrases:[
+    {en:"Here is your bill.", it:"Ecco il conto."},
+    {en:"Are you paying together or separately?", it:"Pagate insieme o separatamente?"},
+    {en:"Service is included.", it:"Il servizio e incluso."},
+    {en:"How would you like to pay: card or cash?", it:"Come desidera pagare: carta o contanti?"},
+    {en:"Sorry, we only take cash.", it:"Mi dispiace, accettiamo solo contanti."},
+    {en:"Keep the change.", it:"Tenga il resto."}
+  ],
+  ex:[
+    {t:"mcq", scene:"bill", q:"An American guest asks for 'the check'. What do they want?",
+     it:"Un ospite americano chiede 'the check'. Cosa vuole?",
+     opts:["The bill - 'check' is American English, 'bill' is British English.","A cheque to pay by post.","To check the menu again.","A receipt for the company."],
+     a:0, why:"bill (UK) = check (US) = il conto."},
+    {t:"gap", scene:"bill", q:"A ten per cent service ___ is included in the bill.",
+     it:"Un dieci per cento di servizio e incluso nel conto.",
+     bank:["charge","tip","price","money"], a:"charge",
+     why:"A service charge is added automatically; a tip is extra and voluntary."},
+    {t:"listen", say:"Could we have the bill, please? And are you able to split it between two cards?",
+     q:"What do the guests want?",
+     opts:["The bill, and to pay with two different cards","The bill and to pay cash","To split one dessert","A receipt for their company"],
+     a:0, why:"'Split the bill' = dividere il conto."},
+    {t:"speak", say:"Here is your bill. Service is included. Are you paying together or separately?",
+     it:"Ecco il conto. Il servizio e incluso. Pagate insieme o separatamente?"},
+    {t:"match", q:"Match the money word with the Italian.",
+     pairs:[["the bill","il conto"],["a tip","una mancia"],["service charge","coperto/servizio"],["change","il resto"],["receipt","lo scontrino"]]}
+  ]
+},
+{
+  id:"l10", unit:3, title:"On the phone", it:"Prenotazioni al telefono e commiati",
+  who:"host", col:"sky", icon:"\uD83D\uDCDE", scene:"phone",
+  phrases:[
+    {en:"Good afternoon, Trattoria Da Nonna, how can I help you?", it:"Buon pomeriggio, come posso aiutarla?"},
+    {en:"For how many people and what time?", it:"Per quante persone e a che ora?"},
+    {en:"Could I take a name and a phone number?", it:"Posso avere un nome e un numero?"},
+    {en:"Could you spell that for me, please?", it:"Me lo puo compitare, per favore?"},
+    {en:"That is booked for you. See you on Friday.", it:"E prenotato. A venerdi."},
+    {en:"Thank you, have a lovely evening!", it:"Grazie, buona serata!"}
+  ],
+  ex:[
+    {t:"mcq", scene:"phone", q:"You cannot understand the guest's surname on the phone. What do you say?",
+     it:"Non capisci il cognome al telefono. Cosa dici?",
+     opts:["Could you spell that for me, please?","Repeat the name slowly, I do not understand.","What? Say again the name.","Write me an email, please."],
+     a:0, why:"'Could you spell that?' = me lo puo compitare? Then repeat it back to confirm."},
+    {t:"gap", scene:"phone", q:"I would like to book a table ___ four at eight o'clock.",
+     it:"Vorrei prenotare un tavolo per quattro alle otto.",
+     bank:["for","to","of","by"], a:"for",
+     why:"'A table for four' - 'for' + number of people."},
+    {t:"listen", say:"Hello, I would like to book a table for six on Saturday at half past seven, under the name Rossi.",
+     q:"What is the booking?",
+     opts:["Six people, Saturday, 7:30 pm, name Rossi","Six people, Sunday, 7:00 pm, name Russo","Seven people, Saturday, 6:30 pm","Six people, Saturday, 8:30 pm"],
+     a:0, why:"'Half past seven' = sette e mezza. 'Under the name' = a nome di."},
+    {t:"speak", say:"Certainly. A table for six on Saturday at half past seven. Could I take a phone number?",
+     it:"Certamente. Un tavolo per sei sabato alle sette e mezza. Posso avere un numero di telefono?"},
+    {t:"order", q:"Put the phone call in the right order.",
+     lines:["Good afternoon, Trattoria Da Nonna, how can I help you?","Hello, I would like to book a table for Friday evening.","Of course. For how many people and what time?","Four people, at eight o'clock.","Perfect. Could I take a name and a phone number?"]}
+  ]
+}
+];
+
+var BOSS = {
+  id:"boss", unit:3, title:"Boss level: the full service", it:"Servizio completo con un ospite AI",
+  who:"chef", col:"yellow", icon:"\uD83D\uDC51", scene:"crown"
+};
+
+var BADGES = [
+  {id:"first",  ico:"\uD83C\uDF31", name:"First shift",     desc:"Finish your first lesson"},
+  {id:"perfect",ico:"\uD83C\uDFAF", name:"Perfect plate",   desc:"Finish a lesson with no mistakes"},
+  {id:"streak3",ico:"\uD83D\uDD25", name:"On fire",         desc:"3-day streak"},
+  {id:"streak7",ico:"\u2694\uFE0F", name:"Week of service", desc:"7-day streak"},
+  {id:"ear",    ico:"\uD83D\uDC42", name:"Golden ear",      desc:"10 listening answers right"},
+  {id:"voice",  ico:"\uD83C\uDFA4", name:"Smooth talker",   desc:"10 speaking tasks done"},
+  {id:"unit1",  ico:"\uD83D\uDEAA", name:"Front of house",  desc:"Finish Unit 1"},
+  {id:"unit2",  ico:"\uD83D\uDC68\u200D\uD83C\uDF73", name:"Kitchen ally", desc:"Finish Unit 2"},
+  {id:"unit3",  ico:"\uD83D\uDCB0", name:"Full service",    desc:"Finish Unit 3"},
+  {id:"lvl5",   ico:"\u2B50", name:"Level 5",          desc:"Reach level 5"},
+  {id:"xp1000", ico:"\uD83C\uDFC6", name:"1000 XP",         desc:"Earn 1000 XP in total"},
+  {id:"boss",   ico:"\uD83D\uDC51", name:"Boss beaten",     desc:"Survive the full service"}
+];
+
+var UNITS = {
+  1:{name:"Unit 1 - Front of house", it:"Accoglienza e ordinazione", col:"var(--green)"},
+  2:{name:"Unit 2 - The food",       it:"Piatti, allergie, richieste", col:"var(--tomato)"},
+  3:{name:"Unit 3 - The service",    it:"Problemi, conto, telefono", col:"var(--grape)"}
+};
+
+var LEVELS = [0,60,150,280,450,660,920,1230,1600,2050,2600,3300,4200];
+function levelFor(xp){ var L=1; for(var i=0;i<LEVELS.length;i++){ if(xp>=LEVELS[i]) L=i+1; } return L; }
+function levelFloor(lv){ return LEVELS[Math.min(lv-1,LEVELS.length-1)]; }
+function levelCeil(lv){ return LEVELS[Math.min(lv,LEVELS.length-1)] || (LEVELS[LEVELS.length-1]+1000); }
+
+/* ---- Unit 4: the rest of the source material, turned into three more lessons ---- */
+
+UNITS[4] = {name:"Unit 4 - Beyond the table", it:"Coppie di parole, cene di lavoro, il tuo menu", col:"var(--sky)"};
+
+LESSONS.push(
+{
+  id:"l11", unit:4, title:"Words that trip you up", it:"Coppie di parole che confondono",
+  who:"host", col:"rose", icon:"\uD83D\uDD00", scene:"bill",
+  phrases:[
+    {en:"bill (UK) = check (US)", it:"il conto"},
+    {en:"starter (UK) = appetiser (US)", it:"l'antipasto"},
+    {en:"a cook prepares food; a chef runs the kitchen", it:"cuoco / chef"},
+    {en:"a service charge is added automatically; a tip is your choice", it:"servizio / mancia"},
+    {en:"a main course is the big dish; a side dish comes with it", it:"secondo / contorno"},
+    {en:"eat in = at home; eat out = in a restaurant", it:"mangiare a casa / fuori"}
+  ],
+  ex:[
+    {t:"mcq", scene:"bill", q:"An American guest and a British guest both want to pay. What do they each ask for?",
+     it:"Cosa chiede ciascuno?",
+     opts:["The American asks for the check, the British guest asks for the bill.","Both ask for the check.","The American asks for the note, the British guest asks for the receipt.","Both ask for the ticket."],
+     a:0, why:"Same thing, two Englishes: bill (UK) = check (US)."},
+    {t:"mcq", scene:"plate", q:"Your colleague says: 'I am the cook, he is the chef.' What is the difference?",
+     it:"Qual e la differenza?",
+     opts:["The chef is trained and runs the kitchen; a cook prepares the food.","There is no difference, chef is just French.","A cook works with meat, a chef with desserts.","A chef serves, a cook washes."],
+     a:0, why:"'Compliments to the chef' - never 'compliments to the cook'."},
+    {t:"gap", scene:"bill", q:"You do not have to leave a tip: a ten per cent service ___ is already on the bill.",
+     it:"Non serve la mancia: il servizio e gia sul conto.",
+     bank:["charge","tip","change","cost"], a:"charge",
+     why:"Service charge = obligatory and printed. Tip = extra and voluntary."},
+    {t:"bingo", q:"Restaurant bingo. Listen to the clue, then tap the phrase.",
+     items:[
+       {en:"the bill", it:"il conto", clue:"The paper that tells you how much the meal costs, in British English."},
+       {en:"a starter", it:"antipasto", clue:"The small dish you eat before the main course, in British English."},
+       {en:"a side dish", it:"contorno", clue:"A small extra plate of food that comes with the main course."},
+       {en:"a tip", it:"mancia", clue:"Extra money you choose to leave for the waiter after paying."},
+       {en:"a chef", it:"chef", clue:"The trained person who runs the kitchen."},
+       {en:"to eat out", it:"mangiare fuori", clue:"To have your meal in a restaurant, not at home."},
+       {en:"cutlery", it:"posate", clue:"Your knife, fork and spoon, all together in one word."},
+       {en:"a serviette", it:"tovagliolo", clue:"The cloth or paper you use to clean your hands and mouth."},
+       {en:"a soft drink", it:"bibita analcolica", clue:"A cold drink with no alcohol, like a coke or a lemonade."}
+     ]},
+    {t:"listen", say:"I used to eat out every night in Greece, but here the restaurants are expensive, so we eat in.",
+     q:"What does this person do now?",
+     opts:["They eat at home.","They eat in restaurants every night.","They cook in a restaurant.","They order takeaway."],
+     a:0, why:"eat in = at home; eat out = in a restaurant."},
+    {t:"match", q:"Match the British word with the American word.",
+     pairs:[["bill","check"],["starter","appetiser"],["serviette","napkin"],["takeaway","takeout"],["aubergine","eggplant"]]}
+  ]
+},
+{
+  id:"l12", unit:4, title:"Eating out with colleagues", it:"Cene di lavoro: brindisi, conti e cortesia",
+  who:"waitress", col:"grape", icon:"\uD83C\uDF77", scene:"drinks",
+  phrases:[
+    {en:"What shall we order?", it:"Cosa ordiniamo?"},
+    {en:"What exactly is it?", it:"Che cos'e esattamente?"},
+    {en:"I am having the same.", it:"Prendo lo stesso."},
+    {en:"Cheers! Here is to our new project.", it:"Salute! Al nostro nuovo progetto."},
+    {en:"I will get this - it is on me.", it:"Offro io."},
+    {en:"No thanks, I am completely full.", it:"No grazie, sono pienissimo."}
+  ],
+  ex:[
+    {t:"mcq", scene:"drinks", q:"Your client lifts a glass and says 'Cheers, here is to our new project.' What do you say?",
+     it:"Il cliente fa un brindisi. Cosa rispondi?",
+     opts:["I will drink to that!","Thank you for the wine.","Yes, cheers is good.","Salute, also for me."],
+     a:0, why:"'I'll drink to that' = sono d'accordo, brindiamo."},
+    {t:"mcq", scene:"bill", q:"Your client says: 'I will get this. You are my guest.' What is the polite reply?",
+     it:"Il cliente vuole pagare. Risposta educata?",
+     opts:["OK, if you insist - but I am paying next time.","No, it is not necessary, really, no.","As you want.","Thank you, you are rich."],
+     a:0, why:"Accept warmly and offer to return the gesture. Refusing twice sounds cold in English."},
+    {t:"sort", q:"Which job does each phrase do? Tap the right category.",
+     cats:["Taking an order","Asking about a dish","Saying it is not available","Paying and tipping"],
+     items:[
+       {t:"Can I take your order?", c:0},
+       {t:"What does it come with?", c:1},
+       {t:"I am afraid we are out of the sea bass.", c:2},
+       {t:"Keep the change.", c:3},
+       {t:"And for your main course?", c:0},
+       {t:"Do you serve vegetarian dishes?", c:1},
+       {t:"This is for you.", c:3},
+       {t:"Sorry, the kitchen has just closed.", c:2}
+     ]},
+    {t:"order", q:"Put this working dinner in the right order.",
+     lines:["What shall we order? You know this place better than I do.","I would recommend the fish soup - it is the local speciality.","What exactly is it?","Different kinds of fish and seafood, served with grilled bread.","That sounds good. I will have it. And you?","I am having the same."]},
+    {t:"speak", say:"That sounds lovely. What exactly is it, and what does it come with?",
+     it:"Sembra ottimo. Che cos'e esattamente e con cosa viene servito?"},
+    {t:"listen", say:"Are you going to have a dessert? No thanks, I am completely full. Me too. Waiter, could we have the bill, please?",
+     q:"What happens at the end of this dinner?",
+     opts:["Nobody wants dessert and they ask for the bill.","They both order dessert and coffee.","One of them orders a dessert to share.","They ask the waiter for the menu again."],
+     a:0, why:"'I'm completely full' = sono pienissimo, non ci sta piu niente."}
+  ]
+},
+{
+  id:"l13", unit:4, title:"Your menu, your service", it:"Scrivi il tuo menu e presentalo",
+  who:"chef", col:"green", icon:"\uD83D\uDCDC", scene:"plate",
+  phrases:[
+    {en:"Tonight's specials are on the board.", it:"Le specialita di stasera sono sulla lavagna."},
+    {en:"Dishes marked with a V are suitable for vegetarians.", it:"I piatti con la V sono vegetariani."},
+    {en:"Allergy information is available on request.", it:"Le informazioni sugli allergeni sono disponibili su richiesta."},
+    {en:"All our pasta is homemade.", it:"Tutta la nostra pasta e fatta in casa."},
+    {en:"A twelve per cent service charge is included.", it:"E incluso un servizio del dodici per cento."},
+    {en:"Let me walk you through the menu.", it:"Le presento il menu."}
+  ],
+  ex:[
+    {t:"mcq", scene:"notepad", q:"Which line belongs at the bottom of an English menu?",
+     it:"Quale riga va in fondo a un menu in inglese?",
+     opts:["Allergy information is available on request. A 12% service charge is included.","We are not responsible for allergies. Pay before leaving.","Attention: allergic people must speak.","Service and allergy are included in the price."],
+     a:0, why:"Two standard lines: allergen information on request, and how service is charged."},
+    {t:"gap", scene:"plate", q:"Dishes ___ with a V are suitable for vegetarians.",
+     it:"I piatti contrassegnati con la V sono vegetariani.",
+     bank:["marked","signed","written","pointed"], a:"marked",
+     why:"'Marked with' = contrassegnato con."},
+    {t:"bingo", q:"Menu bingo. Listen to the clue, then tap the words.",
+     items:[
+       {en:"local speciality", it:"specialita locale", clue:"A dish that only this town or region is famous for."},
+       {en:"allergy information", it:"informazioni allergeni", clue:"The list that tells a guest what a dish contains."},
+       {en:"suitable for vegans", it:"adatto ai vegani", clue:"No meat, no fish, no eggs, no milk in this dish."},
+       {en:"homemade", it:"fatto in casa", clue:"Made here in our kitchen, not bought ready."},
+       {en:"grilled", it:"alla griglia", clue:"Cooked on the fire or the grill, not in oil."},
+       {en:"main course", it:"secondo", clue:"The biggest and most important dish of the meal."},
+       {en:"service charge", it:"servizio", clue:"The percentage the restaurant adds to every bill."},
+       {en:"side dish", it:"contorno", clue:"The small extra plate served next to the main dish."},
+       {en:"dessert", it:"dolce", clue:"The sweet course at the end of the meal."}
+     ]},
+    {t:"menu", q:"Design the menu for your restaurant.",
+     brief:["three starters, three main courses, three desserts","some side dishes","allergy information","a mark for vegetarian or vegan dishes","payment information (is a service charge included?)"],
+     it:"Scrivi il menu in inglese. Poi lo chef lo controlla."},
+    {t:"speak", say:"Let me walk you through the menu. Tonight's speciality is homemade ravioli, and everything marked with a V is suitable for vegetarians.",
+     it:"Le presento il menu. La specialita di stasera sono i ravioli fatti in casa."},
+    {t:"match", q:"Match the menu section with the Italian.",
+     pairs:[["starters","antipasti"],["main courses","secondi"],["side dishes","contorni"],["desserts","dolci"],["drinks","bevande"]]}
+  ]
+});
+
+BADGES.push(
+  {id:"bingo", ico:"\uD83C\uDFB1", name:"Bingo!",        desc:"Win a round of restaurant bingo"},
+  {id:"menu",  ico:"\uD83D\uDCDC", name:"Menu writer",   desc:"Send your own menu to the chef"},
+  {id:"unit4", ico:"\uD83C\uDF7D\uFE0F", name:"Beyond the table", desc:"Finish Unit 4"}
+);
+
+/* Every exercise gets a media slot key: lesson id + position. Drop a photo or a
+   short clip into MEDIA under that key and it replaces the drawn illustration. */
+LESSONS.forEach(function(L){
+  L.ex.forEach(function(e, i){ e.m = L.id + "-" + (i+1); });
+});
+
+/* ---- YOUR OWN IMAGES AND VIDEOS GO HERE ----------------------------------
+   One entry per exercise. Three ways to fill a slot:
+     img:   "data:image/jpeg;base64,..."   embedded, works everywhere, even offline
+            "media/l3-2.jpg"               a file next to this page (GitHub Pages)
+     video: "media/l3-2.mp4"               6-12s, muted, 720p, with a poster image
+   Leave a slot out and the hand-drawn illustration is used instead.
+   Profile -> Media check lists every empty slot by name.                      */
+var MEDIA = {
+  /* example:
+  "l1-1": {img:"media/l1-1.jpg", alt:"A host greeting two guests at the door", caption:"Trattoria Da Nonna, 8 pm"},
+  "l3-2": {video:"media/l3-2.mp4", poster:"media/l3-2.jpg", alt:"A waiter writing an order", caption:"Taking the order"},
+  */
+};
+
+/* ---------------------------------------------------------- ART: mascots + scenes */
+
+var INK = "#3B2A20";
+var CHARS = {
+  chef:     {name:"Chef Bruno",  skin:"#A9714B", hair:"#2E1E14", shirt:"#FFFFFF", accent:"#FF7A33"},
+  waitress: {name:"Lina",        skin:"#F0C08A", hair:"#5A2E10", shirt:"#22B8E0", accent:"#FFC42E"},
+  host:     {name:"Marco",       skin:"#6B4226", hair:"#1A1010", shirt:"#A566FF", accent:"#43C059"}
+};
+
+function s(tag, props){ var kids = Array.prototype.slice.call(arguments,2); return h.apply(null,[tag,props].concat(kids)); }
+function stroke(w){ return {stroke:INK, strokeWidth:w||5, strokeLinecap:"round", strokeLinejoin:"round"}; }
+
+function eyes(mood){
+  var E = [];
+  var lx=62, rx=98, y=64;
+  if(mood==="happy"||mood==="excited"){
+    E.push(s("path",{key:"e1", d:"M"+(lx-11)+" "+(y+3)+" q 11 -16 22 0", fill:"none", stroke:INK, strokeWidth:6, strokeLinecap:"round"}));
+    E.push(s("path",{key:"e2", d:"M"+(rx-11)+" "+(y+3)+" q 11 -16 22 0", fill:"none", stroke:INK, strokeWidth:6, strokeLinecap:"round"}));
+    if(mood==="excited"){
+      E.push(s("path",{key:"sp", d:"M124 30 l4 9 9 4 -9 4 -4 9 -4 -9 -9 -4 9 -4z", fill:"#FFC42E", stroke:INK, strokeWidth:3}));
+    }
+  } else if(mood==="sad"){
+    E.push(s("circle",{key:"e1", cx:lx, cy:y, r:8, fill:INK}));
+    E.push(s("circle",{key:"e2", cx:rx, cy:y, r:8, fill:INK}));
+    E.push(s("path",{key:"b1", d:"M"+(lx-13)+" "+(y-16)+" q 13 6 26 -2", fill:"none", stroke:INK, strokeWidth:5, strokeLinecap:"round"}));
+    E.push(s("path",{key:"b2", d:"M"+(rx-13)+" "+(y-18)+" q 13 8 26 2", fill:"none", stroke:INK, strokeWidth:5, strokeLinecap:"round"}));
+    E.push(s("path",{key:"tear", d:"M"+(rx+7)+" "+(y+8)+" q 7 12 0 16 q -7 -4 0 -16z", fill:"#22B8E0", stroke:INK, strokeWidth:3}));
+  } else if(mood==="angry"){
+    E.push(s("circle",{key:"e1", cx:lx, cy:y+2, r:8, fill:INK}));
+    E.push(s("circle",{key:"e2", cx:rx, cy:y+2, r:8, fill:INK}));
+    E.push(s("path",{key:"b1", d:"M"+(lx-14)+" "+(y-18)+" L"+(lx+12)+" "+(y-8), fill:"none", stroke:INK, strokeWidth:7, strokeLinecap:"round"}));
+    E.push(s("path",{key:"b2", d:"M"+(rx+14)+" "+(y-18)+" L"+(rx-12)+" "+(y-8), fill:"none", stroke:INK, strokeWidth:7, strokeLinecap:"round"}));
+  } else if(mood==="menace"){
+    E.push(s("path",{key:"e1", d:"M"+(lx-12)+" "+(y+2)+" q 12 10 24 0 q -12 -8 -24 0z", fill:INK}));
+    E.push(s("path",{key:"e2", d:"M"+(rx-12)+" "+(y+2)+" q 12 10 24 0 q -12 -8 -24 0z", fill:INK}));
+    E.push(s("path",{key:"b1", d:"M"+(lx-14)+" "+(y-14)+" L"+(lx+12)+" "+(y-6), fill:"none", stroke:INK, strokeWidth:7, strokeLinecap:"round"}));
+    E.push(s("path",{key:"b2", d:"M"+(rx+14)+" "+(y-14)+" L"+(rx-12)+" "+(y-6), fill:"none", stroke:INK, strokeWidth:7, strokeLinecap:"round"}));
+  } else if(mood==="tired"){
+    E.push(s("path",{key:"e1", d:"M"+(lx-11)+" "+(y-2)+" q 11 10 22 0", fill:"none", stroke:INK, strokeWidth:6, strokeLinecap:"round"}));
+    E.push(s("path",{key:"e2", d:"M"+(rx-11)+" "+(y-2)+" q 11 10 22 0", fill:"none", stroke:INK, strokeWidth:6, strokeLinecap:"round"}));
+    E.push(s("path",{key:"z", d:"M118 26 h16 l-16 16 h16", fill:"none", stroke:INK, strokeWidth:4, strokeLinecap:"round"}));
+  } else {
+    E.push(s("circle",{key:"e1", cx:lx, cy:y, r:9, fill:INK}));
+    E.push(s("circle",{key:"e2", cx:rx, cy:y, r:9, fill:INK}));
+    E.push(s("circle",{key:"g1", cx:lx+3, cy:y-3, r:3, fill:"#fff"}));
+    E.push(s("circle",{key:"g2", cx:rx+3, cy:y-3, r:3, fill:"#fff"}));
+  }
+  return E;
+}
+
+function mouth(mood){
+  if(mood==="excited") return s("path",{d:"M58 86 q 22 30 44 0 q -22 10 -44 0z", fill:"#C0392B", stroke:INK, strokeWidth:5, strokeLinejoin:"round"});
+  if(mood==="happy")   return s("path",{d:"M60 84 q 20 22 40 0", fill:"none", stroke:INK, strokeWidth:6, strokeLinecap:"round"});
+  if(mood==="sad")     return s("path",{d:"M62 96 q 18 -18 36 0", fill:"none", stroke:INK, strokeWidth:6, strokeLinecap:"round"});
+  if(mood==="angry")   return s("path",{d:"M60 96 q 20 -20 40 0 q -20 6 -40 0z", fill:"#C0392B", stroke:INK, strokeWidth:5});
+  if(mood==="menace")  return s("path",{d:"M60 88 q 22 14 40 -6", fill:"none", stroke:INK, strokeWidth:6, strokeLinecap:"round"});
+  if(mood==="tired")   return s("path",{d:"M66 92 q 14 8 28 -2", fill:"none", stroke:INK, strokeWidth:6, strokeLinecap:"round"});
+  return s("path",{d:"M64 88 q 16 12 32 0", fill:"none", stroke:INK, strokeWidth:6, strokeLinecap:"round"});
+}
+
+function hat(who, c){
+  if(who==="chef"){
+    return [ s("path",{key:"h1", d:"M36 34 q -6 -26 18 -26 q 6 -14 26 -14 q 20 0 26 14 q 24 0 18 26 q -4 12 -18 10 h-52 q -14 2 -18 -10z", fill:"#FFFFFF", stroke:INK, strokeWidth:5}),
+             s("rect",{key:"h2", x:38, y:36, width:84, height:16, rx:6, fill:"#FFFFFF", stroke:INK, strokeWidth:5}) ];
+  }
+  if(who==="waitress"){
+    return [ s("path",{key:"h1", d:"M34 44 q 6 -40 46 -40 q 40 0 46 40 q -14 -16 -46 -16 q -32 0 -46 16z", fill:c.hair, stroke:INK, strokeWidth:5}),
+             s("path",{key:"h2", d:"M108 30 l14 -8 2 16z", fill:c.accent, stroke:INK, strokeWidth:4}) ];
+  }
+  return [ s("path",{key:"h1", d:"M36 46 q 4 -42 44 -42 q 40 0 44 42 q -10 -20 -44 -20 q -34 0 -44 20z", fill:c.hair, stroke:INK, strokeWidth:5}) ];
+}
+
+function body(who, c){
+  var arms = [ s("path",{key:"a1", d:"M30 150 q -8 -34 16 -44", fill:"none", stroke:INK, strokeWidth:16, strokeLinecap:"round"}),
+               s("path",{key:"a2", d:"M30 150 q -8 -34 16 -44", fill:"none", stroke:c.shirt, strokeWidth:8, strokeLinecap:"round"}) ];
+  var out = [
+    s("path",{key:"t1", d:"M44 178 q 0 -48 36 -48 q 36 0 36 48z", fill:c.shirt, stroke:INK, strokeWidth:5}),
+    arms[0], arms[1]
+  ];
+  if(who==="chef"){
+    out.push(s("path",{key:"ap", d:"M62 178 v-38 q 18 -8 36 0 v38z", fill:"#F3F3F3", stroke:INK, strokeWidth:4}));
+    out.push(s("path",{key:"kn", d:"M64 140 q 16 -8 32 0", fill:"none", stroke:INK, strokeWidth:4}));
+  } else if(who==="waitress"){
+    out.push(s("path",{key:"tr", d:"M96 138 h34 a4 4 0 0 1 0 8 h-34 a4 4 0 0 1 0 -8z", fill:"#E9E2D6", stroke:INK, strokeWidth:4}));
+    out.push(s("circle",{key:"gl", cx:118, cy:130, r:8, fill:c.accent, stroke:INK, strokeWidth:4}));
+  } else {
+    out.push(s("path",{key:"bt", d:"M70 134 l10 8 -10 8 -4 -8z M90 134 l-10 8 10 8 4 -8z", fill:c.accent, stroke:INK, strokeWidth:4}));
+  }
+  return out;
+}
+
+function Mascot(p){
+  var who = p.who || "waitress", mood = p.mood || "happy";
+  var c = CHARS[who] || CHARS.waitress;
+  var size = p.size || 150;
+  return s("svg",{viewBox:"0 0 160 184", width:size, height:size*184/160, className:p.className||"",
+                  role:"img", "aria-label":c.name+" looking "+mood, style:p.style||null},
+    body(who,c),
+    s("circle",{cx:80, cy:70, r:46, fill:c.skin, stroke:INK, strokeWidth:5}),
+    s("ellipse",{cx:48, cy:78, rx:7, ry:9, fill:c.skin, stroke:INK, strokeWidth:4}),
+    s("ellipse",{cx:112, cy:78, rx:7, ry:9, fill:c.skin, stroke:INK, strokeWidth:4}),
+    (mood==="excited"||mood==="happy") ? [s("circle",{key:"c1", cx:56, cy:84, r:7, fill:"#FF8FA3", opacity:.55}), s("circle",{key:"c2", cx:104, cy:84, r:7, fill:"#FF8FA3", opacity:.55})] : null,
+    eyes(mood), mouth(mood), hat(who,c)
+  );
+}
+
+/* ---- flat scene illustrations (one per exercise) ---- */
+function Scene(p){
+  var n = p.name, W = 320, H = 132;
+  var box = function(kids){ return s("svg",{viewBox:"0 0 320 132", width:"100%", style:{maxHeight:"150px", display:"block"}, role:"img", "aria-label":"illustration: "+n}, kids); };
+  var bg = s("rect",{key:"bg", x:2, y:2, width:316, height:128, rx:20, fill:"var(--bg-2)", stroke:"var(--line)", strokeWidth:4});
+  var K = [bg];
+  function add(){ for(var i=0;i<arguments.length;i++) K.push(arguments[i]); }
+  if(n==="door"){
+    add(s("rect",{key:1,x:110,y:24,width:100,height:96,rx:10,fill:"#A9714B",stroke:INK,strokeWidth:5}),
+        s("rect",{key:2,x:126,y:40,width:30,height:38,rx:6,fill:"#FFE7B0",stroke:INK,strokeWidth:4}),
+        s("rect",{key:3,x:164,y:40,width:30,height:38,rx:6,fill:"#FFE7B0",stroke:INK,strokeWidth:4}),
+        s("circle",{key:4,cx:198,cy:92,r:5,fill:"#FFC42E",stroke:INK,strokeWidth:3}),
+        s("path",{key:5,d:"M40 120 v-26 a16 16 0 0 1 32 0 v26z",fill:"#43C059",stroke:INK,strokeWidth:5}),
+        s("circle",{key:6,cx:56,cy:74,r:14,fill:"#F0C08A",stroke:INK,strokeWidth:5}),
+        s("path",{key:7,d:"M240 120 v-26 a16 16 0 0 1 32 0 v26z",fill:"#FF7A33",stroke:INK,strokeWidth:5}),
+        s("circle",{key:8,cx:256,cy:74,r:14,fill:"#6B4226",stroke:INK,strokeWidth:5}));
+  } else if(n==="table"){
+    add(s("rect",{key:1,x:40,y:66,width:240,height:14,rx:7,fill:"#FFFFFF",stroke:INK,strokeWidth:5}),
+        s("path",{key:2,d:"M70 80 v40 M250 80 v40",stroke:INK,strokeWidth:8,strokeLinecap:"round"}),
+        s("circle",{key:3,cx:120,cy:54,r:16,fill:"#FFF",stroke:INK,strokeWidth:5}),
+        s("path",{key:4,d:"M180 60 v-22 M190 60 v-22 M200 60 v-22",stroke:INK,strokeWidth:4,strokeLinecap:"round"}),
+        s("rect",{key:5,x:212,y:32,width:22,height:30,rx:6,fill:"#43C059",stroke:INK,strokeWidth:5}),
+        s("path",{key:6,d:"M96 40 q 24 -18 48 0",stroke:"#FFC42E",strokeWidth:6,fill:"none",strokeLinecap:"round"}));
+  } else if(n==="drinks"){
+    add(s("path",{key:1,d:"M70 40 h52 l-8 62 h-36z",fill:"#9FE3FF",stroke:INK,strokeWidth:5}),
+        s("path",{key:2,d:"M96 102 v14 M78 118 h36",stroke:INK,strokeWidth:6,strokeLinecap:"round"}),
+        s("circle",{key:3,cx:88,cy:62,r:5,fill:"#fff",stroke:INK,strokeWidth:3}),
+        s("circle",{key:4,cx:104,cy:74,r:4,fill:"#fff",stroke:INK,strokeWidth:3}),
+        s("path",{key:5,d:"M180 34 h44 v34 a22 22 0 0 1 -44 0z",fill:"#C0392B",stroke:INK,strokeWidth:5}),
+        s("path",{key:6,d:"M202 90 v22 M186 114 h32",stroke:INK,strokeWidth:6,strokeLinecap:"round"}),
+        s("path",{key:7,d:"M252 30 q 16 26 0 40 q -16 -14 0 -40z",fill:"#FFC42E",stroke:INK,strokeWidth:4}));
+  } else if(n==="notepad"){
+    add(s("rect",{key:1,x:96,y:20,width:110,height:96,rx:12,fill:"#FFF",stroke:INK,strokeWidth:5}),
+        s("path",{key:2,d:"M114 48 h74 M114 66 h74 M114 84 h48",stroke:INK,strokeWidth:5,strokeLinecap:"round"}),
+        s("path",{key:3,d:"M232 96 l34 -60 14 8 -34 60 -16 6z",fill:"#FFC42E",stroke:INK,strokeWidth:5}),
+        s("circle",{key:4,cx:60,cy:66,r:24,fill:"#43C059",stroke:INK,strokeWidth:5}),
+        s("path",{key:5,d:"M50 66 l8 10 16 -20",stroke:"#fff",strokeWidth:6,fill:"none",strokeLinecap:"round"}));
+  } else if(n==="plate"){
+    add(s("circle",{key:1,cx:160,cy:70,r:52,fill:"#FFF",stroke:INK,strokeWidth:5}),
+        s("circle",{key:2,cx:160,cy:70,r:38,fill:"#FFF4E0",stroke:INK,strokeWidth:4}),
+        s("path",{key:3,d:"M136 66 q 24 -22 48 0 q -24 22 -48 0z",fill:"#FF9F6E",stroke:INK,strokeWidth:4}),
+        s("path",{key:4,d:"M148 82 q 12 8 24 0",stroke:"#43C059",strokeWidth:6,fill:"none",strokeLinecap:"round"}),
+        s("path",{key:5,d:"M64 28 v76 M56 28 v22 M72 28 v22",stroke:INK,strokeWidth:5,strokeLinecap:"round"}),
+        s("path",{key:6,d:"M256 28 v76 M256 28 q 14 8 0 28",stroke:INK,strokeWidth:5,strokeLinecap:"round",fill:"none"}));
+  } else if(n==="allergy"){
+    add(s("circle",{key:1,cx:96,cy:66,r:40,fill:"#FF5C7A",stroke:INK,strokeWidth:5}),
+        s("path",{key:2,d:"M96 44 v26 M96 84 v4",stroke:"#fff",strokeWidth:8,strokeLinecap:"round"}),
+        s("path",{key:3,d:"M172 92 q -8 -34 22 -34 q 30 0 22 34z",fill:"#C98A4B",stroke:INK,strokeWidth:5}),
+        s("circle",{key:4,cx:186,cy:74,r:5,fill:INK}),
+        s("path",{key:5,d:"M238 40 q 26 12 0 50 q -26 -38 0 -50z",fill:"#43C059",stroke:INK,strokeWidth:5}),
+        s("path",{key:6,d:"M150 110 h130",stroke:INK,strokeWidth:5,strokeLinecap:"round"}));
+  } else if(n==="cutlery"){
+    add(s("rect",{key:1,x:96,y:30,width:128,height:74,rx:10,fill:"#FF8FA3",stroke:INK,strokeWidth:5}),
+        s("path",{key:2,d:"M96 50 h128 M96 70 h128 M96 90 h128",stroke:"#fff",strokeWidth:4,opacity:.7}),
+        s("path",{key:3,d:"M60 24 v84 M52 24 v20 M68 24 v20",stroke:INK,strokeWidth:5,strokeLinecap:"round"}),
+        s("path",{key:4,d:"M260 24 v84 M260 24 q 16 10 0 30",stroke:INK,strokeWidth:5,strokeLinecap:"round",fill:"none"}));
+  } else if(n==="complaint"){
+    add(s("path",{key:1,d:"M60 96 q -10 -40 34 -40 q 44 0 34 40z",fill:"#9FE3FF",stroke:INK,strokeWidth:5}),
+        s("path",{key:2,d:"M78 52 q 6 -16 0 -24 M96 52 q 8 -18 0 -26",stroke:"#B9B9B9",strokeWidth:5,fill:"none",strokeLinecap:"round"}),
+        s("path",{key:3,d:"M52 100 h84",stroke:INK,strokeWidth:6,strokeLinecap:"round"}),
+        s("circle",{key:4,cx:216,cy:64,r:34,fill:"#FFC42E",stroke:INK,strokeWidth:5}),
+        s("path",{key:5,d:"M202 78 q 14 -16 28 0",stroke:INK,strokeWidth:6,fill:"none",strokeLinecap:"round"}),
+        s("path",{key:6,d:"M202 48 l12 6 M230 48 l-12 6",stroke:INK,strokeWidth:6,strokeLinecap:"round"}));
+  } else if(n==="dessert"){
+    add(s("path",{key:1,d:"M104 104 h112 l-10 -44 h-92z",fill:"#FFE7B0",stroke:INK,strokeWidth:5}),
+        s("path",{key:2,d:"M100 60 h120",stroke:INK,strokeWidth:5,strokeLinecap:"round"}),
+        s("path",{key:3,d:"M112 60 q 48 -34 96 0",fill:"#FFF",stroke:INK,strokeWidth:5}),
+        s("circle",{key:4,cx:160,cy:30,r:9,fill:"#FF5C7A",stroke:INK,strokeWidth:4}),
+        s("path",{key:5,d:"M56 56 q 18 -22 36 0 q -18 26 -36 0z",fill:"#6B4226",stroke:INK,strokeWidth:5}),
+        s("path",{key:6,d:"M248 40 q 22 22 0 44",stroke:"#43C059",strokeWidth:6,fill:"none",strokeLinecap:"round"}));
+  } else if(n==="bill"){
+    add(s("path",{key:1,d:"M96 16 h96 v96 l-16 -10 -16 10 -16 -10 -16 10 -16 -10 -16 10z",fill:"#FFF",stroke:INK,strokeWidth:5}),
+        s("path",{key:2,d:"M112 40 h64 M112 58 h64 M112 76 h40",stroke:INK,strokeWidth:4,strokeLinecap:"round"}),
+        s("rect",{key:3,x:214,y:52,width:72,height:46,rx:8,fill:"#43C059",stroke:INK,strokeWidth:5}),
+        s("path",{key:4,d:"M214 66 h72",stroke:INK,strokeWidth:5}),
+        s("circle",{key:5,cx:52,cy:70,r:22,fill:"#FFC42E",stroke:INK,strokeWidth:5}),
+        s("path",{key:6,d:"M52 58 v24 M46 64 h12",stroke:INK,strokeWidth:4,strokeLinecap:"round"}));
+  } else if(n==="phone"){
+    add(s("rect",{key:1,x:122,y:14,width:76,height:104,rx:16,fill:"#2B2B2B",stroke:INK,strokeWidth:5}),
+        s("rect",{key:2,x:132,y:28,width:56,height:74,rx:8,fill:"#9FE3FF",stroke:INK,strokeWidth:4}),
+        s("path",{key:3,d:"M146 52 q 14 -14 28 0 M148 72 h24",stroke:INK,strokeWidth:5,fill:"none",strokeLinecap:"round"}),
+        s("path",{key:4,d:"M46 46 q 20 -14 30 4 l-10 10 q 8 16 22 22 l10 -10 q 18 10 4 30 q -60 -8 -56 -56z",fill:"#43C059",stroke:INK,strokeWidth:5}),
+        s("path",{key:5,d:"M232 40 q 22 26 0 52 M254 26 q 36 44 0 80",stroke:"#FF7A33",strokeWidth:6,fill:"none",strokeLinecap:"round"}));
+  } else if(n==="crown"){
+    add(s("path",{key:1,d:"M78 100 l-14 -62 34 24 22 -38 22 38 34 -24 -14 62z",fill:"#FFC42E",stroke:INK,strokeWidth:5}),
+        s("path",{key:2,d:"M78 100 h124",stroke:INK,strokeWidth:7,strokeLinecap:"round"}),
+        s("circle",{key:3,cx:120,cy:76,r:6,fill:"#FF5C7A",stroke:INK,strokeWidth:3}),
+        s("circle",{key:4,cx:160,cy:76,r:6,fill:"#43C059",stroke:INK,strokeWidth:3}),
+        s("circle",{key:5,cx:200,cy:76,r:6,fill:"#22B8E0",stroke:INK,strokeWidth:3}));
+  } else {
+    add(s("circle",{key:1,cx:160,cy:66,r:40,fill:"#FFC42E",stroke:INK,strokeWidth:5}));
+  }
+  return box(K);
+}
+
+/* ---------------------------------------------------------- ENGINE: storage, streak, speech, confetti */
+
+var KEY = "tavola.v1";
+function blankState(){
+  return {name:"", xp:0, streak:0, lastDay:"", done:{}, badges:[], heard:0, spoken:0, bossWon:false, bingoWon:false, menuSent:false, joined:todayKey()};
+}
+function todayKey(){
+  var d = new Date();
+  return d.getFullYear()+"-"+("0"+(d.getMonth()+1)).slice(-2)+"-"+("0"+d.getDate()).slice(-2);
+}
+function yesterdayKey(){
+  var d = new Date(); d.setDate(d.getDate()-1);
+  return d.getFullYear()+"-"+("0"+(d.getMonth()+1)).slice(-2)+"-"+("0"+d.getDate()).slice(-2);
+}
+function loadState(){
+  try{
+    var raw = window.localStorage.getItem(KEY);
+    if(!raw) return blankState();
+    var o = JSON.parse(raw); var b = blankState();
+    for(var k in b){ if(!(k in o)) o[k] = b[k]; }
+    return o;
+  }catch(e){ return blankState(); }
+}
+function saveState(st){
+  try{ window.localStorage.setItem(KEY, JSON.stringify(st)); }catch(e){}
+}
+
+/* ---- text to speech (device voices, chunked, bug-guarded) ---- */
+var TTS = {
+  voices: [], chosen: null, current: null, queue: [], idx: 0, onstate: null, speaking: false, rate: 0.95
+};
+var VOICE_RANK = ["Natural","Neural","Online","Google UK English Female","Google UK English Male","Google US English",
+  "Microsoft Sonia","Microsoft Ryan","Microsoft Libby","Microsoft Aria","Microsoft Zira","Microsoft David",
+  "Microsoft Hazel","Samantha","Karen","Daniel","Moira","Tessa"];
+function rankVoice(v){
+  for(var i=0;i<VOICE_RANK.length;i++){ if(v.name.indexOf(VOICE_RANK[i])>=0) return i; }
+  return 99;
+}
+function refreshVoices(cb){
+  if(!("speechSynthesis" in window)) return;
+  var all = window.speechSynthesis.getVoices() || [];
+  var en = all.filter(function(v){ return (v.lang||"").toLowerCase().indexOf("en")===0; });
+  en.sort(function(a,b){ return rankVoice(a)-rankVoice(b) || a.name.localeCompare(b.name); });
+  TTS.voices = en.length ? en : all;
+  if(!TTS.chosen && TTS.voices.length) TTS.chosen = TTS.voices[0].name;
+  if(cb) cb(TTS.voices.slice());
+}
+function initVoices(cb){
+  refreshVoices(cb);
+  if("speechSynthesis" in window){
+    window.speechSynthesis.onvoiceschanged = function(){ refreshVoices(cb); };
+    [200,600,1200,2500].forEach(function(ms){ setTimeout(function(){ refreshVoices(cb); }, ms); });
+  }
+}
+function chunkText(t){
+  var parts = String(t).replace(/\s+/g," ").match(/[^.!?]+[.!?]?/g) || [String(t)];
+  var out = [], buf = "";
+  parts.forEach(function(p){
+    if((buf+p).length > 170 && buf){ out.push(buf.trim()); buf = p; }
+    else buf += p;
+  });
+  if(buf.trim()) out.push(buf.trim());
+  return out;
+}
+function ttsStop(){
+  TTS.queue = []; TTS.idx = 0; TTS.speaking = false; TTS.current = null;
+  try{ window.speechSynthesis.cancel(); }catch(e){}
+  if(TTS.onstate) TTS.onstate({playing:false, part:0, total:0});
+}
+function ttsSpeak(text, rate, onDone){
+  if(!("speechSynthesis" in window)){ if(onDone) onDone(); return; }
+  ttsStop();
+  TTS.queue = chunkText(text); TTS.idx = 0; TTS.speaking = true;
+  TTS.rate = rate || TTS.rate;
+  var voice = null;
+  for(var i=0;i<TTS.voices.length;i++){ if(TTS.voices[i].name === TTS.chosen) voice = TTS.voices[i]; }
+  function step(){
+    if(!TTS.speaking || TTS.idx >= TTS.queue.length){
+      TTS.speaking = false;
+      if(TTS.onstate) TTS.onstate({playing:false, part:0, total:0});
+      if(onDone) onDone();
+      return;
+    }
+    var u = new window.SpeechSynthesisUtterance(TTS.queue[TTS.idx]);
+    if(voice){ u.voice = voice; u.lang = voice.lang; } else { u.lang = "en-GB"; }
+    u.rate = TTS.rate; u.pitch = 1;
+    TTS.current = u;
+    if(TTS.onstate) TTS.onstate({playing:true, part:TTS.idx+1, total:TTS.queue.length});
+    u.onend = function(){ TTS.idx++; setTimeout(step, 180); };
+    u.onerror = function(){ TTS.idx++; setTimeout(step, 180); };
+    try{ window.speechSynthesis.speak(u); }catch(e){ TTS.idx++; setTimeout(step,180); }
+  }
+  setTimeout(step, 70);
+}
+
+/* ---- speech recognition ---- */
+function recogAvailable(){ return !!(window.SpeechRecognition || window.webkitSpeechRecognition); }
+function normWords(t){
+  return String(t).toLowerCase().replace(/[^a-z' ]/g," ").split(/\s+/).filter(Boolean);
+}
+function scoreSpeech(target, said){
+  var A = normWords(target), B = normWords(said), pool = B.slice(), hit = 0;
+  A.forEach(function(w){
+    var i = pool.indexOf(w);
+    if(i>=0){ hit++; pool.splice(i,1); }
+    else {
+      for(var j=0;j<pool.length;j++){
+        if(pool[j].length>3 && w.length>3 && (pool[j].indexOf(w.slice(0,4))===0)){ hit++; pool.splice(j,1); break; }
+      }
+    }
+  });
+  return A.length ? Math.round(hit/A.length*100) : 0;
+}
+
+/* ---- confetti ---- */
+var CONF = {parts:[], raf:0, cv:null, ctx:null};
+function confetti(n){
+  var cv = document.getElementById("confetti");
+  if(!cv) return;
+  if(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  CONF.cv = cv; CONF.ctx = cv.getContext("2d");
+  cv.width = window.innerWidth; cv.height = window.innerHeight;
+  var cols = ["#43C059","#FF7A33","#FFC42E","#A566FF","#22B8E0","#FF5C7A"];
+  for(var i=0;i<(n||90);i++){
+    CONF.parts.push({
+      x: Math.random()*cv.width, y: -20 - Math.random()*cv.height*0.4,
+      w: 7+Math.random()*9, hh: 10+Math.random()*12,
+      vy: 2.6+Math.random()*3.4, vx: -1.6+Math.random()*3.2,
+      rot: Math.random()*6.28, vr: -0.16+Math.random()*0.32,
+      c: cols[(Math.random()*cols.length)|0]
+    });
+  }
+  if(!CONF.raf) tickConfetti();
+}
+function tickConfetti(){
+  var ctx = CONF.ctx, cv = CONF.cv;
+  if(!ctx){ CONF.raf = 0; return; }
+  ctx.clearRect(0,0,cv.width,cv.height);
+  CONF.parts = CONF.parts.filter(function(p){ return p.y < cv.height + 40; });
+  CONF.parts.forEach(function(p){
+    p.x += p.vx; p.y += p.vy; p.rot += p.vr;
+    ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot);
+    ctx.fillStyle = p.c; ctx.fillRect(-p.w/2,-p.hh/2,p.w,p.hh);
+    ctx.restore();
+  });
+  if(CONF.parts.length){ CONF.raf = window.requestAnimationFrame(tickConfetti); }
+  else { ctx.clearRect(0,0,cv.width,cv.height); CONF.raf = 0; }
+}
+
+/* ---- small sound effects (WebAudio, no files) ---- */
+var AC = null;
+function beep(kind){
+  try{
+    if(!AC) AC = new (window.AudioContext||window.webkitAudioContext)();
+    var notes = kind==="ok" ? [660,880] : kind==="win" ? [523,659,784,1047] : [220,180];
+    notes.forEach(function(f,i){
+      var o = AC.createOscillator(), g = AC.createGain();
+      o.type = "triangle"; o.frequency.value = f;
+      g.gain.value = 0.0001;
+      o.connect(g); g.connect(AC.destination);
+      var t = AC.currentTime + i*0.09;
+      g.gain.exponentialRampToValueAtTime(0.14, t+0.01);
+      g.gain.exponentialRampToValueAtTime(0.0001, t+0.22);
+      o.start(t); o.stop(t+0.24);
+    });
+  }catch(e){}
+}
+
+/* ---- capability wiring (Claude runtime: sample + db) ---- */
+var CAP = {sample:null, db:null, ready:false};
+function bootCaps(cb){
+  if(!(window.claude && window.claude.use)){ CAP.ready = true; cb && cb(); return; }
+  var got = 0;
+  function done(){ got++; if(got>=2){ CAP.ready = true; cb && cb(); } }
+  try{
+    window.claude.use("sample").then(function(s){ CAP.sample = s; done(); }, function(){ done(); });
+    window.claude.use("db").then(function(d){ CAP.db = d; done(); }, function(){ done(); });
+  }catch(e){ CAP.ready = true; cb && cb(); }
+}
+function shuffle(a){
+  var x = a.slice();
+  for(var i=x.length-1;i>0;i--){ var j=(Math.random()*(i+1))|0; var t=x[i]; x[i]=x[j]; x[j]=t; }
+  return x;
+}
+
+/* ---------------------------------------------------------- UI PIECES */
+
+function Wordmark(p){
+  var size = p && p.size || 30;
+  return s("svg",{viewBox:"0 0 340 66", height:size, role:"img","aria-label":"TAVOLA!"},
+    s("text",{x:0,y:50, fontFamily:"Fredoka, sans-serif", fontSize:54, fontWeight:600,
+              fill:"var(--green)", stroke:INK, strokeWidth:4, paintOrder:"stroke", letterSpacing:"1"},"TAVOLA!"),
+    s("path",{d:"M296 16 q 26 -14 34 2 q -12 18 -34 8 q -6 -6 0 -10z", fill:"var(--yellow)", stroke:INK, strokeWidth:4, strokeLinejoin:"round"}),
+    s("path",{d:"M302 18 q 14 2 22 6", stroke:INK, strokeWidth:3, fill:"none", strokeLinecap:"round"})
+  );
+}
+
+function Pill(p){
+  return h("span",{className:"pill", style:{background:p.bg||"var(--bg-2)", borderColor:p.bc||"var(--line)", color:p.fg||"var(--ink)"}}, p.children);
+}
+
+function Bar(p){
+  return h("div",{className:"bar", role:"progressbar","aria-valuenow":Math.round(p.pct)},
+    h("div",{style:{width:Math.max(2,Math.min(100,p.pct))+"%", background:p.col||"var(--green)"}}));
+}
+
+function AudioPlayer(p){
+  var st = useState({playing:false, part:0, total:0}), pl = st[0], setPl = st[1];
+  var rs = useState(0.85), rate = rs[0], setRate = rs[1];
+  useEffect(function(){
+    TTS.onstate = function(x){ setPl(x); };
+    return function(){ TTS.onstate = null; };
+  },[]);
+  function toggle(){
+    if(pl.playing){ ttsStop(); return; }
+    ttsSpeak(p.text, rate);
+  }
+  var status = pl.playing
+    ? (pl.total>1 ? "Playing - part "+pl.part+"/"+pl.total+"..." : "Playing...")
+    : "Tap play to listen";
+  return h("div",{className:"card flat noprint", style:{background:"var(--bg-2)", padding:"12px"}},
+    h("div",{className:"row", style:{flexWrap:"wrap"}},
+      h("button",{className:"btn sky", onClick:toggle, style:{minWidth:"120px"}}, pl.playing? "\u23F8 Stop" : "\u25B6 Play"),
+      h("button",{className:"btn tiny", onClick:function(){ ttsStop(); setRate(0.7); setTimeout(function(){ ttsSpeak(p.text,0.7); },60); }}, "\uD83D\uDC22 Slow"),
+      h("button",{className:"btn tiny", onClick:function(){ ttsStop(); setRate(1); setTimeout(function(){ ttsSpeak(p.text,1); },60); }}, "Normal"),
+      h("span",{className:"muted small"}, status)
+    )
+  );
+}
+
+function VoicePicker(){
+  var vs = useState(TTS.voices.slice()), list = vs[0], setList = vs[1];
+  var ch = useState(TTS.chosen||""), chosen = ch[0], setChosen = ch[1];
+  useEffect(function(){ initVoices(function(v){ setList(v); if(!chosen && TTS.chosen) setChosen(TTS.chosen); }); },[]);
+  if(!list.length) return h("p",{className:"muted small"},"No English voices found on this device. Listening tasks will still show the text.");
+  return h("div",null,
+    h("p",{className:"small muted", style:{margin:"0 0 6px"}},"Voice for listening and pronunciation (device voices - the ones with Natural / Neural / Online in the name sound best):"),
+    h("select",{value:chosen, onChange:function(e){ TTS.chosen = e.target.value; setChosen(e.target.value); }},
+      list.map(function(v){ return h("option",{key:v.name, value:v.name}, v.name+" ("+v.lang+")"); })
+    ),
+    h("button",{className:"btn tiny", style:{marginTop:"10px"}, onClick:function(){ ttsSpeak("Good evening! Do you have a reservation?", 0.9); }},"\uD83D\uDD0A Test this voice")
+  );
+}
+
+/* ---------------------------------------------------------- EXERCISE RENDERERS */
+
+function MCQ(p){
+  var ex = p.ex;
+  var opts = useMemo(function(){
+    return shuffle(ex.opts.map(function(o,i){ return {t:o, i:i}; }));
+  },[ex]);
+  return h("div",null,
+    ex.it ? h("p",{className:"muted small", style:{margin:"0 0 10px"}}, ex.it) : null,
+    h("div",{className:"grid"},
+      opts.map(function(o,n){
+        var cls = "choice";
+        if(p.locked){
+          if(o.i===ex.a) cls += " ok";
+          else if(p.value===o.i) cls += " no";
+        } else if(p.value===o.i) cls += " sel";
+        return h("button",{key:n, className:cls, onClick:function(){ if(!p.locked) p.onChange(o.i); }},
+          h("span",{className:"key"}, n+1), h("span",null,o.t));
+      })
+    )
+  );
+}
+
+function Gap(p){
+  var ex = p.ex;
+  var bank = useMemo(function(){ return shuffle(ex.bank); },[ex]);
+  var parts = ex.q.split("___");
+  return h("div",null,
+    ex.it ? h("p",{className:"muted small", style:{margin:"0 0 10px"}}, ex.it) : null,
+    h("div",{className:"card", style:{fontSize:"20px", lineHeight:1.8, marginBottom:"16px"}},
+      parts[0],
+      h("span",{className:"blank", style:{borderColor: p.locked ? (p.value===ex.a?"var(--green)":"var(--rose)") : "var(--sky)",
+                                          color: p.locked ? (p.value===ex.a?"var(--green)":"var(--rose)") : "var(--sky)"}},
+        p.value || "\u00A0\u00A0\u00A0\u00A0\u00A0"),
+      parts[1]||""),
+    h("div",{className:"row", style:{flexWrap:"wrap"}},
+      bank.map(function(w){
+        return h("button",{key:w, className:"chip"+(p.value===w?" used":""), onClick:function(){ if(!p.locked) p.onChange(w); }}, w);
+      })
+    ),
+    p.value && !p.locked ? h("button",{className:"btn tiny ghost", style:{marginTop:"10px"}, onClick:function(){ p.onChange(null); }},"Clear") : null
+  );
+}
+
+function Listen(p){
+  var ex = p.ex;
+  var sh = useState(false), show = sh[0], setShow = sh[1];
+  var opts = useMemo(function(){ return shuffle(ex.opts.map(function(o,i){ return {t:o,i:i}; })); },[ex]);
+  useEffect(function(){ var t = setTimeout(function(){ ttsSpeak(ex.say, 0.85); }, 350); return function(){ clearTimeout(t); ttsStop(); }; },[ex]);
+  return h("div",null,
+    h(AudioPlayer,{text:ex.say}),
+    h("div",{style:{margin:"12px 0"}},
+      h("button",{className:"btn tiny ghost", onClick:function(){ setShow(!show); }}, show? "Hide the text" : "\uD83D\uDC41 I cannot hear it - show the text"),
+      show ? h("p",{className:"card", style:{marginTop:"10px", fontStyle:"italic"}}, ex.say) : null
+    ),
+    h("div",{className:"grid"},
+      opts.map(function(o,n){
+        var cls = "choice";
+        if(p.locked){ if(o.i===ex.a) cls+=" ok"; else if(p.value===o.i) cls+=" no"; }
+        else if(p.value===o.i) cls+=" sel";
+        return h("button",{key:n, className:cls, onClick:function(){ if(!p.locked) p.onChange(o.i); }},
+          h("span",{className:"key"}, n+1), h("span",null,o.t));
+      })
+    )
+  );
+}
+
+function Speak(p){
+  var ex = p.ex;
+  var stS = useState({state:"idle", said:"", score:0}), r = stS[0], setR = stS[1];
+  var recRef = useRef(null);
+  useEffect(function(){ return function(){ try{ recRef.current && recRef.current.stop(); }catch(e){} ttsStop(); }; },[ex]);
+  function listen(){
+    var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if(!SR){ return; }
+    ttsStop();
+    var rec = new SR();
+    recRef.current = rec;
+    rec.lang = "en-GB"; rec.interimResults = false; rec.maxAlternatives = 3;
+    setR({state:"listening", said:"", score:0});
+    rec.onresult = function(e){
+      var best = 0, txt = "";
+      for(var i=0;i<e.results[0].length;i++){
+        var alt = e.results[0][i].transcript;
+        var sc = scoreSpeech(ex.say, alt);
+        if(sc>=best){ best = sc; txt = alt; }
+      }
+      setR({state:"done", said:txt, score:best});
+      p.onChange({score:best, said:txt});
+      beep(best>=60?"ok":"no");
+    };
+    rec.onerror = function(){ setR({state:"error", said:"", score:0}); };
+    rec.onend = function(){ setR(function(x){ return x.state==="listening" ? {state:"error",said:"",score:0} : x; }); };
+    try{ rec.start(); }catch(e){ setR({state:"error", said:"", score:0}); }
+  }
+  var canRec = recogAvailable();
+  return h("div",null,
+    h("div",{className:"card", style:{fontSize:"22px", textAlign:"center", padding:"22px 16px"}},
+      h("div",null, ex.say),
+      ex.it ? h("p",{className:"muted small", style:{marginBottom:0}}, ex.it) : null),
+    h("div",{className:"row", style:{marginTop:"14px", flexWrap:"wrap"}},
+      h("button",{className:"btn sky", onClick:function(){ ttsSpeak(ex.say, 0.8); }},"\uD83D\uDD0A Hear it"),
+      canRec
+        ? h("button",{className:"btn tomato"+(r.state==="listening"?" pulse":""), onClick:listen},
+            r.state==="listening" ? "\uD83C\uDFA4 Listening..." : "\uD83C\uDFA4 Say it")
+        : h("button",{className:"btn green", onClick:function(){ setR({state:"done", said:"(self-checked)", score:100}); p.onChange({score:100, said:"self"}); }},"\u2705 I said it"),
+      !canRec ? h("span",{className:"muted small"},"This browser cannot score your voice - use Chrome for that. Say it out loud, then tap.") : null
+    ),
+    r.state==="done" ? h("div",{className:"card pop", style:{marginTop:"14px"}},
+      h("div",{className:"row"},
+        h("b",{style:{fontSize:"26px", fontFamily:"Fredoka", color: r.score>=80?"var(--green)": r.score>=60?"var(--yellow)":"var(--tomato)"}}, r.score+"%"),
+        h("span",{className:"muted small"}, r.said && r.said!=="self" ? "I heard: \u201C"+r.said+"\u201D" : "Nice work.")),
+      h("div",{className:"xpbar", style:{marginTop:"8px"}}, h("div",{style:{width:r.score+"%", background: r.score>=60?"var(--green)":"var(--tomato)"}}))
+    ) : null,
+    r.state==="error" ? h("p",{className:"muted small", style:{marginTop:"10px"}},
+      "The microphone did not catch that. Check the mic permission, or tap ",
+      h("button",{className:"btn tiny", onClick:function(){ setR({state:"done", said:"self", score:100}); p.onChange({score:100, said:"self"}); }},"I said it")) : null
+  );
+}
+
+function Match(p){
+  var ex = p.ex;
+  var L = useMemo(function(){ return shuffle(ex.pairs.map(function(x,i){ return {t:x[0], i:i}; })); },[ex]);
+  var R = useMemo(function(){ return shuffle(ex.pairs.map(function(x,i){ return {t:x[1], i:i}; })); },[ex]);
+  var st = useState({pick:null, done:[], wrong:null, errs:0}), m = st[0], setM = st[1];
+  useEffect(function(){
+    if(m.done.length === ex.pairs.length && ex.pairs.length){ p.onChange({done:true, errs:m.errs}); beep("ok"); }
+  },[m.done.length]);
+  function tapL(i){ if(m.done.indexOf(i)>=0) return; setM(Object.assign({},m,{pick:i, wrong:null})); }
+  function tapR(i){
+    if(m.done.indexOf(i)>=0) return;
+    if(m.pick===null) return;
+    if(m.pick===i){ setM({pick:null, done:m.done.concat([i]), wrong:null, errs:m.errs}); beep("ok"); }
+    else { setM(Object.assign({},m,{wrong:i, errs:m.errs+1})); beep("no"); setTimeout(function(){ setM(function(x){ return Object.assign({},x,{wrong:null, pick:null}); }); }, 450); }
+  }
+  function cell(o, side){
+    var done = m.done.indexOf(o.i)>=0;
+    var cls = "choice" + (done? " ok" : (side==="L" && m.pick===o.i ? " sel" : "")) + (side==="R" && m.wrong===o.i ? " no shake":"");
+    return h("button",{key:side+o.i, className:cls, style:{opacity:done?0.5:1, justifyContent:"center", textAlign:"center"},
+      onClick:function(){ side==="L"? tapL(o.i) : tapR(o.i); }}, o.t);
+  }
+  return h("div",null,
+    h("p",{className:"muted small", style:{marginTop:0}}, ex.q||"Tap the English, then its Italian."),
+    h("div",{className:"grid g2"},
+      h("div",{className:"grid"}, L.map(function(o){ return cell(o,"L"); })),
+      h("div",{className:"grid"}, R.map(function(o){ return cell(o,"R"); }))
+    )
+  );
+}
+
+function Order(p){
+  var ex = p.ex;
+  var bank = useMemo(function(){ return shuffle(ex.lines.map(function(t,i){ return {t:t,i:i}; })); },[ex]);
+  var picked = p.value || [];
+  function tap(o){
+    if(p.locked) return;
+    if(picked.some(function(x){ return x.i===o.i; })) return;
+    p.onChange(picked.concat([o]));
+  }
+  function undo(){ if(!p.locked) p.onChange(picked.slice(0,-1)); }
+  return h("div",null,
+    h("p",{className:"muted small", style:{marginTop:0}}, ex.q||"Tap the lines in the right order."),
+    h("div",{className:"card", style:{minHeight:"120px", marginBottom:"14px", background:"var(--bg-2)"}},
+      picked.length? picked.map(function(o,n){
+        var ok = p.locked ? (o.i===n) : null;
+        return h("div",{key:o.i, className:"row slidein", style:{marginBottom:"6px"}},
+          h("span",{className:"key"}, n+1),
+          h("span",{style:{color: ok===false? "var(--rose)" : ok===true? "var(--green)":"inherit"}}, o.t));
+      }) : h("span",{className:"muted"},"Your dialogue will appear here."),
+      picked.length && !p.locked ? h("button",{className:"btn tiny ghost", style:{marginTop:"8px"}, onClick:undo},"\u21A9 Undo") : null
+    ),
+    h("div",{className:"grid"},
+      bank.map(function(o){
+        var used = picked.some(function(x){ return x.i===o.i; });
+        return h("button",{key:o.i, className:"choice"+(used?" used":""), style:{opacity:used?0.25:1}, onClick:function(){ tap(o); }}, o.t);
+      })
+    )
+  );
+}
+
+/* ---------------------------------------------------------- MEDIA SLOT */
+
+function MediaSlot(p){
+  var m = MEDIA[p.mkey];
+  var frame = {border:"3px solid var(--line)", borderRadius:"20px", overflow:"hidden",
+               background:"var(--bg-2)", boxShadow:"0 6px 0 var(--line)"};
+  if(m && m.video){
+    return h("figure",{style:{margin:"0 0 4px"}},
+      h("div",{style:frame},
+        h("video",{src:m.video, poster:m.poster||null, autoPlay:true, muted:true, loop:true,
+          playsInline:true, preload:"metadata", "aria-label":m.alt||"video",
+          style:{width:"100%", display:"block", maxHeight:"260px", objectFit:"cover"}})),
+      m.caption ? h("figcaption",{className:"small muted", style:{fontStyle:"italic", marginTop:"6px"}}, m.caption) : null);
+  }
+  if(m && m.img){
+    return h("figure",{style:{margin:"0 0 4px"}},
+      h("div",{style:frame},
+        h("img",{src:m.img, alt:m.alt||"", loading:"lazy",
+          style:{width:"100%", display:"block", maxHeight:"260px", objectFit:"cover"}})),
+      m.caption ? h("figcaption",{className:"small muted", style:{fontStyle:"italic", marginTop:"6px"}}, m.caption) : null);
+  }
+  return p.scene ? h(Scene,{name:p.scene}) : null;
+}
+
+/* ---------------------------------------------------------- BINGO */
+
+var BINGO_LINES = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+
+function Bingo(p){
+  var ex = p.ex;
+  var grid = useMemo(function(){ return shuffle(ex.items.map(function(x,i){ return {x:x, i:i}; })).slice(0,9); },[ex]);
+  var callOrder = useMemo(function(){ return shuffle(grid.map(function(c){ return c.i; })); },[grid]);
+  var B = useState({marked:[], step:0, errs:0, wrong:null, won:false}), b = B[0], setB = B[1];
+  var current = b.won ? null : callOrder[b.step];
+  var item = current===undefined || current===null ? null : ex.items[current];
+
+  useEffect(function(){
+    if(item){ var t = setTimeout(function(){ ttsSpeak(item.clue, 0.85); }, 300); return function(){ clearTimeout(t); }; }
+  },[b.step, b.won]);
+  useEffect(function(){ return function(){ ttsStop(); }; },[]);
+
+  function tap(pos){
+    if(b.won || !item) return;
+    var cell = grid[pos];
+    if(b.marked.indexOf(pos)>=0) return;
+    if(cell.i === current){
+      var marked = b.marked.concat([pos]);
+      var win = BINGO_LINES.some(function(L){ return L.every(function(k){ return marked.indexOf(k)>=0; }); });
+      beep(win?"win":"ok");
+      setB({marked:marked, step:b.step+1, errs:b.errs, wrong:null, won:win});
+      if(win){ ttsStop(); confetti(140); p.onChange({done:true, errs:b.errs}); }
+      else if(b.step+1 >= callOrder.length){ p.onChange({done:true, errs:b.errs}); setB(function(x){ return Object.assign({},x,{won:true}); }); }
+    } else {
+      beep("no");
+      setB(Object.assign({}, b, {wrong:pos, errs:b.errs+1}));
+      setTimeout(function(){ setB(function(x){ return Object.assign({},x,{wrong:null}); }); }, 450);
+    }
+  }
+
+  return h("div",null,
+    h("p",{className:"muted small", style:{marginTop:0}}, ex.q||"Listen to the clue and tap the right square. Three in a row wins."),
+    b.won
+      ? h("div",{className:"card pop", style:{textAlign:"center", borderColor:"var(--yellow)", marginBottom:"14px"}},
+          h(Mascot,{who:"waitress", mood:"excited", size:90}),
+          h("h2",{style:{margin:"4px 0"}},"BINGO!"),
+          h("p",{className:"small muted"}, b.errs===0 ? "Perfect card. Not one wrong square." : b.errs+" wrong tap"+(b.errs===1?"":"s")+" along the way."))
+      : h("div",{className:"card", style:{marginBottom:"14px", background:"var(--bg-2)"}},
+          h("div",{className:"row"},
+            h("button",{className:"btn sky", onClick:function(){ if(item) ttsSpeak(item.clue, 0.8); }},"\uD83D\uDD0A Hear the clue again"),
+            h("span",{className:"small muted"}, "Square "+(b.marked.length+1)+" of 9")),
+          item ? h("p",{style:{margin:"10px 0 0", fontSize:"18px"}}, "\u201C"+item.clue+"\u201D") : null),
+    h("div",{className:"grid", style:{gridTemplateColumns:"repeat(3,1fr)", gap:"8px"}},
+      grid.map(function(c, pos){
+        var on = b.marked.indexOf(pos)>=0;
+        var cls = "choice" + (on? " ok":"") + (b.wrong===pos? " no shake":"");
+        return h("button",{key:pos, className:cls, style:{justifyContent:"center", textAlign:"center", minHeight:"84px", fontSize:"15px", padding:"8px"},
+          onClick:function(){ tap(pos); }},
+          h("span",null, on? "\u2705 " : "", c.x.en));
+      }))
+  );
+}
+
+/* ---------------------------------------------------------- SORT INTO FUNCTIONS */
+
+function Sort(p){
+  var ex = p.ex;
+  var items = useMemo(function(){ return shuffle(ex.items); },[ex]);
+  var S = useState({n:0, errs:0, flash:null}), st = S[0], setSt = S[1];
+  var done = st.n >= items.length;
+  useEffect(function(){ if(done) p.onChange({done:true, errs:st.errs}); },[done]);
+  var it = items[st.n];
+  function pick(ci){
+    if(st.flash!==null || done) return;
+    var ok = it.c===ci;
+    beep(ok?"ok":"no");
+    setSt(Object.assign({}, st, {flash:{ci:ci, ok:ok}, errs: st.errs + (ok?0:1)}));
+    setTimeout(function(){ setSt(function(x){ return {n:x.n+1, errs:x.errs, flash:null}; }); }, ok? 420 : 1100);
+  }
+  return h("div",null,
+    h("p",{className:"muted small", style:{marginTop:0}}, ex.q),
+    h("div",{className:"xpbar", style:{marginBottom:"12px"}}, h("div",{style:{width:(st.n/items.length*100)+"%"}})),
+    done ? h("div",{className:"card pop", style:{textAlign:"center"}},
+      h(Mascot,{who:"host", mood:"excited", size:80}), h("b",null,"All sorted!"),
+      h("p",{className:"small muted"}, st.errs===0? "Every phrase in the right job." : st.errs+" went to the wrong place - look at them again below."))
+    : h("div",null,
+        h("div",{className:"card", style:{textAlign:"center", fontSize:"20px", padding:"22px 14px", marginBottom:"14px"}},
+          "\u201C"+it.t+"\u201D"),
+        h("div",{className:"grid g2"},
+          ex.cats.map(function(c, ci){
+            var cls = "choice";
+            if(st.flash){
+              if(ci===it.c) cls += " ok";
+              else if(st.flash.ci===ci) cls += " no shake";
+            }
+            return h("button",{key:ci, className:cls, style:{justifyContent:"center", textAlign:"center", minHeight:"74px"},
+              onClick:function(){ pick(ci); }}, c);
+          })),
+        st.flash && !st.flash.ok ? h("p",{className:"small muted", style:{marginTop:"10px"}},
+          "That one belongs in: ", h("b",null, ex.cats[it.c])) : null)
+  );
+}
+
+/* ---------------------------------------------------------- MENU WRITING TASK */
+
+function MenuTask(p){
+  var ex = p.ex;
+  var T = useState(""), txt = T[0], setTxt = T[1];
+  var F = useState({busy:false, fb:null, err:""}), f = F[0], setF = F[1];
+  var enough = txt.trim().length >= 80;
+  function send(){
+    if(!CAP.sample){ p.onChange({done:true, errs:0}); return; }
+    setF({busy:true, fb:null, err:""});
+    var prompt = "You are a warm, encouraging English teacher and a head chef. An ITALIAN restaurant worker (CEFR A2-B1) has written a restaurant menu in English.\n"+
+      "The menu had to include: three starters, three main courses, three desserts, some side dishes, allergy information, a mark for vegetarian or vegan dishes, and payment information such as a service charge.\n\n"+
+      "THEIR MENU:\n"+txt.slice(0,3000)+"\n\n"+
+      "Reply with ONLY this JSON: "+
+      '{"score":0-100,"good":"one warm sentence about what works","missing":["anything from the list above that is not there"],"fix":["three short language corrections, each showing the wrong version and the better version"],"phrase":"one professional menu line they could add"}';
+    CAP.sample.json(prompt, {modelTier:"default"}).then(function(d){
+      setF({busy:false, fb:{score:Math.max(0,Math.min(100,Number(d&&d.score)||70)), good:(d&&d.good)||"",
+        missing:(d&&d.missing)||[], fix:(d&&d.fix)||[], phrase:(d&&d.phrase)||""}, err:""});
+      confetti(110); beep("win");
+      p.onChange({done:true, errs:0});
+    }).catch(function(e){
+      setF({busy:false, fb:null, err: e && e.code==="not_granted" ? "" : "The chef could not read it just now. Your menu still counts - tap Check."});
+      p.onChange({done:true, errs:0});
+    });
+  }
+  return h("div",null,
+    h("p",{className:"muted small", style:{marginTop:0}}, ex.it),
+    h("div",{className:"card", style:{background:"var(--bg-2)", marginBottom:"12px"}},
+      h("b",null,"Your menu must include:"),
+      h("ul",{style:{margin:"8px 0 0", paddingLeft:"20px"}},
+        ex.brief.map(function(b,n){ return h("li",{key:n, className:"small"}, b); }))),
+    h("textarea",{rows:12, value:txt, placeholder:"TRATTORIA DA NONNA\n\nSTARTERS\n...\n\nMAIN COURSES\n...\n\nAllergy information is available on request.",
+      onChange:function(e){ setTxt(e.target.value); }}),
+    h("div",{className:"row", style:{marginTop:"10px", flexWrap:"wrap"}},
+      h("button",{className:"btn grape", disabled:!enough || f.busy, onClick:send},
+        f.busy? "The chef is reading..." : (CAP.sample? "\u2728 Send it to the chef" : "\u2705 Save my menu")),
+      h("span",{className:"small muted"}, enough? "" : "Write a little more first.")),
+    f.err ? h("p",{className:"small", style:{color:"var(--rose)"}}, f.err) : null,
+    f.fb ? h("div",{className:"card pop", style:{marginTop:"14px", borderColor:"var(--yellow)"}},
+      h("h3",null,"The chef says: ", h("span",{style:{color:"var(--green)"}}, f.fb.score+"/100")),
+      f.fb.good ? h("p",null,"\u2705 "+f.fb.good) : null,
+      (f.fb.missing||[]).length ? h("p",{className:"small"},"\uD83D\uDCCB Still missing: "+f.fb.missing.join(", ")) : null,
+      (f.fb.fix||[]).map(function(x,n){ return h("p",{key:n, className:"small"},"\uD83D\uDD27 "+x); }),
+      f.fb.phrase ? h("p",{className:"card", style:{background:"var(--bg-2)"}},"\u2B50 Add this line: ", h("b",null,f.fb.phrase)) : null) : null
+  );
+}
+
+/* ---------------------------------------------------------- MEDIA CHECK (teacher tool) */
+
+var EXNAMES = {mcq:"multiple choice", gap:"fill the gap", listen:"listening", speak:"speaking",
+               match:"matching", order:"dialogue order", bingo:"bingo", sort:"sorting", menu:"menu task"};
+
+function MediaCheck(){
+  var O = useState(false), open = O[0], setOpen = O[1];
+  var C = useState(""), copied = C[0], setCopied = C[1];
+  var rows = [];
+  LESSONS.forEach(function(L){
+    L.ex.forEach(function(e){
+      var m = MEDIA[e.m];
+      rows.push({key:e.m, lesson:L.title, type:EXNAMES[e.t]||e.t,
+                 state: m && m.video ? "video" : (m && m.img ? "image" : "empty")});
+    });
+  });
+  var filled = rows.filter(function(r){ return r.state!=="empty"; }).length;
+  var list = rows.filter(function(r){ return r.state==="empty"; })
+                 .map(function(r){ return r.key + "  \u2014  " + r.lesson + " / " + r.type; }).join("\n");
+  return h("div",{className:"card"},
+    h("div",{className:"row", style:{flexWrap:"wrap"}},
+      h("b",{style:{flex:1}}, filled+" of "+rows.length+" media slots filled"),
+      h("button",{className:"btn tiny", onClick:function(){ setOpen(!open); }}, open? "Hide the list":"Show the list")),
+    h("p",{className:"small muted", style:{margin:"6px 0 0"}},
+      "Each exercise has a slot name like l3-2. Name your photo l3-2.jpg or your clip l3-2.mp4 and it drops straight into that exercise."),
+    open ? h("div",null,
+      h("textarea",{rows:10, readOnly:true, value:list || "Every slot is filled.", style:{marginTop:"10px", fontSize:"13px"}}),
+      h("div",{className:"row", style:{marginTop:"8px"}},
+        h("button",{className:"btn tiny sky", onClick:function(){
+          try{ navigator.clipboard.writeText(list); setCopied("Copied."); }catch(e){ setCopied("Select the text above and copy it."); }
+        }},"Copy the empty slots"),
+        copied ? h("span",{className:"small muted"}, copied) : null)) : null
+  );
+}
+
+/* ---------------------------------------------------------- LESSON SCREEN */
+
+function isCorrect(ex, v){
+  if(v===null || v===undefined) return false;
+  if(ex.t==="mcq" || ex.t==="listen") return v===ex.a;
+  if(ex.t==="gap") return v===ex.a;
+  if(ex.t==="speak") return !!(v && v.score>=60);
+  if(ex.t==="match" || ex.t==="bingo" || ex.t==="sort" || ex.t==="menu") return !!(v && v.done);
+  if(ex.t==="order") return !!(v && v.length===ex.lines.length && v.every(function(o,n){ return o.i===n; }));
+  return false;
+}
+function answerText(ex){
+  if(ex.t==="mcq"||ex.t==="listen") return ex.opts[ex.a];
+  if(ex.t==="gap") return ex.q.replace("___", ex.a.toUpperCase());
+  if(ex.t==="order") return ex.lines.join("  \u2192  ");
+  return "";
+}
+var PRAISE = ["Nice one!","That is it!","Perfect service!","Exactly right!","Beautiful!","Chef is proud!","You are on fire!"];
+var SOFT = ["Almost - look again.","Not this time.","Close! Here is the good one.","Let us fix that."];
+
+function LessonScreen(p){
+  var L = p.lesson;
+  var q0 = useMemo(function(){ return L.ex.map(function(e,i){ return {ex:e, key:L.id+"-"+i, retry:false}; }); },[L]);
+  var Q = useState(q0), queue = Q[0], setQueue = Q[1];
+  var I = useState(0), i = I[0], setI = I[1];
+  var V = useState(null), val = V[0], setVal = V[1];
+  var LK = useState(false), locked = LK[0], setLocked = LK[1];
+  var SC = useState({right:0, asked:0, xp:0, slips:0}), sc = SC[0], setSc = SC[1];
+  var msg = useRef("");
+  var flags = useRef({});
+
+  var item = queue[i];
+  useEffect(function(){ setVal(null); setLocked(false); },[i]);
+  useEffect(function(){ return function(){ ttsStop(); }; },[]);
+
+  if(!item) return null;
+  var ex = item.ex;
+  var good = locked ? isCorrect(ex,val) : false;
+
+  function check(){
+    var ok = isCorrect(ex,val);
+    if(ok && ex.t==="bingo") flags.current.bingo = true;
+    if(ok && ex.t==="menu") flags.current.menu = true;
+    msg.current = ok ? PRAISE[(Math.random()*PRAISE.length)|0] : SOFT[(Math.random()*SOFT.length)|0];
+    var gain = ok ? (item.retry ? 4 : (ex.t==="speak" && val && val.score>=85 ? 14 : 10)) : 0;
+    setSc({right:sc.right+(ok?1:0), asked:sc.asked+1, xp:sc.xp+gain, slips:sc.slips+(ok?0:1)});
+    setLocked(true);
+    beep(ok?"ok":"no");
+  }
+  function next(){
+    var ok = isCorrect(ex,val);
+    var nq = queue;
+    if(!ok && !item.retry){
+      nq = queue.concat([{ex:ex, key:item.key+"-r", retry:true}]);
+      setQueue(nq);
+    }
+    if(i+1 >= nq.length){
+      p.onFinish({xp:sc.xp, right:sc.right, asked:sc.asked, slips:sc.slips, perfect: sc.slips===0, flags: flags.current});
+    } else { setI(i+1); }
+  }
+
+  var canCheck = val!==null && val!==undefined && !(ex.t==="order" && val.length!==ex.lines.length);
+  var pct = (i/queue.length)*100;
+  var mood = !locked ? "happy" : (good ? "excited" : (item.retry ? "menace" : "sad"));
+
+  var body;
+  if(ex.t==="mcq") body = h(MCQ,{ex:ex, value:val, locked:locked, onChange:setVal});
+  else if(ex.t==="gap") body = h(Gap,{ex:ex, value:val, locked:locked, onChange:setVal});
+  else if(ex.t==="listen") body = h(Listen,{ex:ex, value:val, locked:locked, onChange:setVal});
+  else if(ex.t==="speak") body = h(Speak,{ex:ex, value:val, locked:locked, onChange:setVal});
+  else if(ex.t==="match") body = h(Match,{ex:ex, value:val, locked:locked, onChange:function(v){ setVal(v); }});
+  else if(ex.t==="order") body = h(Order,{ex:ex, value:val, locked:locked, onChange:setVal});
+  else if(ex.t==="bingo") body = h(Bingo,{ex:ex, value:val, locked:locked, onChange:setVal});
+  else if(ex.t==="sort") body = h(Sort,{ex:ex, value:val, locked:locked, onChange:setVal});
+  else if(ex.t==="menu") body = h(MenuTask,{ex:ex, value:val, locked:locked, onChange:setVal});
+
+  var TITLES = {mcq:"Choose the right answer", gap:"Complete the sentence", listen:"Listen and answer",
+                speak:"Say it like a pro", match:"Match the pairs", order:"Put the service in order",
+                bingo:"Restaurant bingo", sort:"Which job does it do?", menu:"Write your own menu"};
+
+  return h("div",null,
+    h("div",{className:"topbar noprint"},
+      h("div",{className:"inner"},
+        h("button",{className:"btn tiny ghost", onClick:function(){ ttsStop(); p.onExit(); }, "aria-label":"Leave lesson"},"\u2715"),
+        h(Bar,{pct:pct, col:"var(--green)"}),
+        h("span",{className:"stat"},"\u2764\uFE0F ", h("span",{className:"num"}, Math.max(0,5-sc.slips)))
+      )),
+    h("div",{className:"wrap"},
+      h("h2",{style:{margin:"22px 0 4px"}}, TITLES[ex.t]||"Exercise"),
+      h("p",{className:"muted small", style:{marginTop:0}}, L.title+" \u00B7 "+(i+1)+" / "+queue.length),
+      (ex.scene || MEDIA[ex.m]) ? h("div",{style:{margin:"12px 0 16px"}}, h(MediaSlot,{mkey:ex.m, scene:ex.scene})) : null,
+      ex.q && ex.t!=="match" && ex.t!=="order" ? h("div",{className:"row", style:{alignItems:"flex-start", margin:"0 0 16px", gap:"14px"}},
+        h(Mascot,{who:L.who, mood:mood, size:74, className:"bounce"}),
+        h("div",{className:"speech", style:{flex:1}}, h("b",{style:{fontSize:"19px"}}, ex.q))
+      ) : null,
+      body,
+      h("div",{style:{height:"40px"}})
+    ),
+    h("div",{className:"footerbar"},
+      locked ? h("div",{className:"verdict "+(good?"ok":"no")},
+        h("div",{className:"row"},
+          h(Mascot,{who:L.who, mood:mood, size:56}),
+          h("div",null,
+            h("b",{style:{fontFamily:"Fredoka", fontSize:"20px"}}, good? "\u2705 "+msg.current : "\u274C "+msg.current),
+            !good && answerText(ex) ? h("div",{className:"small"},"Answer: ", h("b",null,answerText(ex))) : null,
+            ex.why ? h("div",{className:"small muted"}, ex.why) : null
+          ))) : null,
+      h("div",{className:"inner"},
+        locked
+          ? h("button",{className:"btn big "+(good?"green":"tomato"), onClick:next}, "Continue \u2192")
+          : h("button",{className:"btn big green", disabled:!canCheck, onClick:check}, (ex.t==="match"?"Finish the pairs": ex.t==="bingo"?"Play to bingo": ex.t==="sort"?"Sort them all": ex.t==="menu"?"Check":"Check"))
+      ))
+  );
+}
+
+/* ---------------------------------------------------------- AI EXTRA PRACTICE */
+
+function AIPractice(p){
+  var S = useState({phase:"idle", items:null, err:"", pick:{}}), st = S[0], setSt = S[1];
+  if(!CAP.sample) return null;
+  function ask(){
+    setSt({phase:"loading", items:null, err:"", pick:{}});
+    var prompt = "You are a CELTA-qualified English teacher writing practice for ITALIAN restaurant staff (waiters, hosts, chefs) at CEFR B1.\n"+
+      "Topic of this lesson: "+p.lesson.title+" ("+p.lesson.it+").\n"+
+      "Key phrases already taught: "+p.lesson.phrases.map(function(x){ return x.en; }).join(" | ")+"\n"+
+      "Write 3 NEW multiple-choice questions in a real restaurant situation, different from the phrases above. "+
+      "Each has 4 options, exactly one correct, realistic distractors that an Italian speaker might produce (false friends, word order, missing articles). "+
+      "Reply with ONLY a JSON array, one object per question: "+
+      '[{"q":"situation + question in English","opts":["a","b","c","d"],"a":0,"why":"one short line, may mention the Italian"}]';
+    CAP.sample.json(prompt, {modelTier:"default"}).then(function(data){
+      var arr = Array.isArray(data) ? data : (data && data.questions) || [];
+      arr = arr.filter(function(x){ return x && x.q && Array.isArray(x.opts) && x.opts.length>=2; }).slice(0,3);
+      if(!arr.length) throw {code:"invalid_json"};
+      setSt({phase:"ready", items:arr, err:"", pick:{}});
+    }).catch(function(e){
+      var m = e && e.code==="not_granted" ? "" :
+              e && e.code==="rate_limited" ? "Too many requests right now. Try again in a minute." :
+              "The chef is busy. Try again in a moment.";
+      setSt({phase:"err", items:null, err:m, pick:{}});
+    });
+  }
+  if(st.phase==="idle") return h("div",{className:"aibox noprint", style:{marginTop:"16px"}},
+    h("div",{className:"row"},
+      h(Mascot,{who:"chef", mood:"excited", size:60}),
+      h("div",{style:{flex:1}},
+        h("b",null,"Still hungry? Ask the chef for fresh questions."),
+        h("p",{className:"small muted", style:{margin:"2px 0 8px"}},"Claude writes three brand-new questions about this lesson, just for you."))),
+    h("button",{className:"btn grape big", onClick:ask},"\u2728 Generate extra practice"));
+  if(st.phase==="loading") return h("div",{className:"aibox noprint", style:{marginTop:"16px", textAlign:"center"}},
+    h(Mascot,{who:"chef", mood:"tired", size:70, className:"bounce"}),
+    h("p",null,"Cooking up new questions..."));
+  if(st.phase==="err") return h("div",{className:"aibox noprint", style:{marginTop:"16px"}},
+    h("p",null, st.err || "Extra practice is not available in this view."),
+    st.err ? h("button",{className:"btn tiny", onClick:ask},"Try again") : null);
+  return h("div",{className:"aibox noprint", style:{marginTop:"16px"}},
+    h("b",null,"\u2728 Fresh from the kitchen"),
+    st.items.map(function(q,qi){
+      var chosen = st.pick[qi];
+      return h("div",{key:qi, style:{marginTop:"14px"}},
+        h("p",{style:{marginBottom:"8px"}}, h("b",null,(qi+1)+". "), q.q),
+        h("div",{className:"grid"}, q.opts.map(function(o,oi){
+          var cls = "choice";
+          if(chosen!==undefined){ if(oi===q.a) cls+=" ok"; else if(chosen===oi) cls+=" no"; }
+          return h("button",{key:oi, className:cls, onClick:function(){
+            if(chosen!==undefined) return;
+            var np = Object.assign({}, st.pick); np[qi]=oi;
+            setSt(Object.assign({}, st, {pick:np}));
+            if(oi===q.a){ beep("ok"); p.onXP(6); } else beep("no");
+          }}, o);
+        })),
+        chosen!==undefined && q.why ? h("p",{className:"small muted"}, q.why) : null);
+    })
+  );
+}
+
+/* ---------------------------------------------------------- RESULT SCREEN */
+
+function ResultScreen(p){
+  var r = p.result, L = p.lesson;
+  useEffect(function(){ confetti(r.perfect?150:90); beep("win"); },[]);
+  var acc = r.asked ? Math.round(r.right/r.asked*100) : 100;
+  return h("div",{className:"wrap"},
+    h("div",{style:{textAlign:"center", paddingTop:"30px"}},
+      h(Mascot,{who:L.who, mood:r.perfect?"excited":"happy", size:170, className:"pop"}),
+      h("h1",{style:{fontSize:"34px", margin:"10px 0 4px"}}, r.perfect? "Perfect service!" : "Lesson complete!"),
+      h("p",{className:"muted"}, r.perfect? "Not a single slip. The chef is speechless." : "Every shift makes you faster. Well done.")),
+    h("div",{className:"grid g2", style:{marginTop:"20px"}},
+      h("div",{className:"card", style:{textAlign:"center", borderColor:"var(--yellow)"}},
+        h("div",{style:{fontSize:"30px", fontFamily:"Fredoka"}},"+"+p.totalXP+" XP"),
+        h("div",{className:"muted small"},"earned this lesson")),
+      h("div",{className:"card", style:{textAlign:"center", borderColor:"var(--green)"}},
+        h("div",{style:{fontSize:"30px", fontFamily:"Fredoka"}}, acc+"%"),
+        h("div",{className:"muted small"},"accuracy"))),
+    p.newBadges && p.newBadges.length ? h("div",{className:"card pop", style:{marginTop:"16px", borderColor:"var(--grape)"}},
+      h("b",null,"\uD83C\uDF89 New achievement!"),
+      h("div",{className:"row", style:{marginTop:"8px", flexWrap:"wrap"}},
+        p.newBadges.map(function(b){ return h("div",{key:b.id, className:"badge", style:{minWidth:"120px"}},
+          h("div",{className:"ico"}, b.ico), h("b",null,b.name), h("span",{className:"muted"}, b.desc)); }))
+    ) : null,
+    h("div",{className:"card", style:{marginTop:"16px"}},
+      h("b",null,"Phrases you can use at work tomorrow"),
+      h("div",{style:{marginTop:"8px"}}, L.phrases.slice(0,4).map(function(x,n){
+        return h("div",{key:n, className:"row", style:{marginBottom:"6px", alignItems:"flex-start"}},
+          h("button",{className:"btn tiny sky noprint", onClick:function(){ ttsSpeak(x.en, 0.85); }},"\uD83D\uDD0A"),
+          h("div",null, h("b",null,x.en), h("div",{className:"muted small"}, x.it)));
+      }))),
+    h(AIPractice,{lesson:L, onXP:p.onXP}),
+    h("div",{style:{height:"30px"}}),
+    h("div",{className:"footerbar"}, h("div",{className:"inner"},
+      h("button",{className:"btn big green", onClick:p.onDone},"Back to the path \u2192")))
+  );
+}
+
+/* ---------------------------------------------------------- BOSS LEVEL, OFFLINE VERSION */
+
+var SERVICE = [
+ {guest:"Good evening. We have not booked - is there a table for two?", mood:"neutral", scene:"door",
+  opts:[{t:"Good evening! Of course - follow me, there is a table by the window.", p:12, fb:"Warm, and you give them the solution immediately."},
+        {t:"You have no reservation. Wait there.", p:4, fb:"True, but cold. Greet first, then explain."},
+        {t:"No reservation, no table. Sorry.", p:0, fb:"Never close the door like this - offer the wait or the bar."}]},
+ {guest:"Thank you. Could we have some water, please?", mood:"happy", scene:"drinks",
+  opts:[{t:"Of course. Still or sparkling?", p:12, fb:"The standard question in English. Perfect."},
+        {t:"Natural or with gas?", p:4, fb:"Understandable, but it is an Italian expression translated word for word."},
+        {t:"Water is on the table.", p:0, fb:"You have not taken the order."}]},
+ {guest:"I have a nut allergy. Does the pesto contain nuts?", mood:"menace", scene:"allergy",
+  opts:[{t:"Let me check with the chef before you order anything - I will be right back.", p:12, fb:"Exactly right. Never guess with an allergy."},
+        {t:"I think there are no nuts in it.", p:4, fb:"'I think' is dangerous with allergies. Go and check."},
+        {t:"Yes, but only a few. It is fine.", p:0, fb:"This could put the guest in hospital."}]},
+ {guest:"Good. And what would you recommend for my main course?", mood:"neutral", scene:"plate",
+  opts:[{t:"I would recommend the grilled sea bass. It comes with roast potatoes and vegetables.", p:12, fb:"A recommendation plus what it comes with - textbook service."},
+        {t:"The fish is good.", p:6, fb:"Right idea, but give the name of the dish and what is served with it."},
+        {t:"Everything is good here.", p:0, fb:"This tells the guest nothing and does not help them choose."}]},
+ {guest:"Perfect. Oh - actually, make that a coke instead of the wine.", mood:"happy", scene:"drinks",
+  opts:[{t:"No problem at all. One coke instead of the white wine.", p:12, fb:"Accept the change and repeat it back. No fuss."},
+        {t:"The wine is already ordered.", p:4, fb:"Maybe true, but say it as an apology, not a refusal."},
+        {t:"Why? The wine is better with fish.", p:0, fb:"Never argue with a guest about their own order."}]},
+ {guest:"Excuse me... this is not what I ordered. I asked for the sea bass.", mood:"angry", scene:"complaint",
+  opts:[{t:"I am so sorry about that. Let me take it back and bring your sea bass right away.", p:12, fb:"Apologise, act, give a time. Nothing else needed."},
+        {t:"Sorry, I will ask the kitchen what happened.", p:6, fb:"Better to fix it first and investigate later."},
+        {t:"Are you sure? You said pork.", p:0, fb:"Never tell the guest they are wrong, even when they are."}]},
+ {guest:"Thank you, that is better. No dessert for me, I am completely full. Just the bill, please.", mood:"happy", scene:"bill",
+  opts:[{t:"Of course. Here is your bill - a twelve per cent service charge is included.", p:12, fb:"Clear about the service charge before they ask. Professional."},
+        {t:"Here is the bill. You must pay at the desk.", p:6, fb:"Fine, but explain the service charge too."},
+        {t:"No dessert? Our tiramisu is very good, take it.", p:0, fb:"They said they are full. Pushing after a no damages the whole meal."}]},
+ {guest:"Here you are. Keep the change.", mood:"excited", scene:"crown",
+  opts:[{t:"Thank you very much. Have a lovely evening!", p:12, fb:"Warm close. This is the line they remember."},
+        {t:"Thank you, goodbye.", p:6, fb:"Correct but flat. Add something human."},
+        {t:"Are you sure? It is a lot.", p:0, fb:"Accept a tip gracefully and simply say thank you."}]}
+];
+
+function OfflineBoss(p){
+  var S = useState({n:0, log:[], score:0, picked:null}), st = S[0], setSt = S[1];
+  var done = st.n >= SERVICE.length;
+  useEffect(function(){
+    if(done){ confetti(150); beep("win"); p.onWin(Math.round(st.score/(SERVICE.length*12)*100)); }
+  },[done]);
+  useEffect(function(){ return function(){ ttsStop(); }; },[]);
+
+  if(done){
+    var pct = Math.round(st.score/(SERVICE.length*12)*100);
+    return h("div",{className:"wrap"},
+      h("div",{style:{textAlign:"center", paddingTop:"26px"}},
+        h(Mascot,{who:"chef", mood: pct>=80?"excited":"happy", size:150, className:"pop"}),
+        h("h1",{style:{margin:"8px 0 2px"}}, pct>=80? "Service of the night!" : "Service finished."),
+        h("div",{style:{fontSize:"40px", fontFamily:"Fredoka", color:"var(--green)"}}, pct+"/100")),
+      h("div",{className:"card", style:{marginTop:"16px"}},
+        h("b",null,"Your shift, step by step"),
+        st.log.map(function(L,n){
+          return h("div",{key:n, style:{padding:"10px 0", borderBottom:"2px solid var(--line)"}},
+            h("div",{className:"small muted"}, "Guest: "+L.guest),
+            h("div",null, (L.p===12? "\u2705 ":"\uD83D\uDD27 ")+L.t),
+            h("div",{className:"small muted"}, L.fb));
+        })),
+      h("div",{className:"footerbar"}, h("div",{className:"inner"},
+        h("button",{className:"btn big green", onClick:p.onExit},"Back to the path \u2192"))));
+  }
+
+  var step = SERVICE[st.n];
+  function choose(o){
+    if(st.picked) return;
+    beep(o.p===12?"ok":(o.p===0?"no":"ok"));
+    setSt(Object.assign({}, st, {picked:o}));
+  }
+  function next(){
+    setSt({n:st.n+1, log:st.log.concat([{guest:step.guest, t:st.picked.t, p:st.picked.p, fb:st.picked.fb}]),
+           score:st.score+st.picked.p, picked:null});
+  }
+  return h("div",null,
+    h("div",{className:"topbar noprint"}, h("div",{className:"inner"},
+      h("button",{className:"btn tiny ghost", onClick:function(){ ttsStop(); p.onExit(); }},"\u2715"),
+      h(Bar,{pct:(st.n/SERVICE.length)*100, col:"var(--yellow)"}),
+      h("span",{className:"stat"},"\u26A1 ", h("span",{className:"num"}, st.score)))),
+    h("div",{className:"wrap"},
+      h("h2",{style:{margin:"20px 0 4px"}},"Table nine \u00B7 step "+(st.n+1)+" of "+SERVICE.length),
+      h("div",{style:{margin:"12px 0"}}, h(MediaSlot,{mkey:"boss-"+(st.n+1), scene:step.scene})),
+      h("div",{className:"row", style:{alignItems:"flex-start", gap:"14px", margin:"0 0 16px"}},
+        h(Mascot,{who:"host", mood:step.mood, size:76, className:"bounce"}),
+        h("div",{className:"speech", style:{flex:1}},
+          h("div",{className:"small muted"},"The guest says"),
+          h("b",{style:{fontSize:"18px"}}, step.guest),
+          h("button",{className:"btn tiny sky noprint", style:{marginTop:"8px"}, onClick:function(){ ttsSpeak(step.guest, 0.85); }},"\uD83D\uDD0A Hear it"))),
+      h("p",{className:"muted small"},"What do you say?"),
+      h("div",{className:"grid"},
+        step.opts.map(function(o,i){
+          var cls = "choice";
+          if(st.picked){ if(o.p===12) cls+=" ok"; else if(st.picked===o) cls+=" no"; }
+          return h("button",{key:i, className:cls, onClick:function(){ choose(o); }}, o.t);
+        })),
+      st.picked ? h("div",{className:"card pop", style:{marginTop:"14px", borderColor: st.picked.p===12?"var(--green)":"var(--tomato)"}},
+        h("b",null, st.picked.p===12? "\u2705 Perfect service (+12)" : (st.picked.p>0? "\uD83D\uDD27 It works, but (+"+st.picked.p+")" : "\u274C Not this one (+0)")),
+        h("p",{className:"small", style:{margin:"4px 0 0"}}, st.picked.fb),
+        st.picked.p!==12 ? h("p",{className:"small"},"Better: ", h("b",null, step.opts.filter(function(x){ return x.p===12; })[0].t)) : null) : null,
+      h("div",{style:{height:"30px"}})),
+    h("div",{className:"footerbar"}, h("div",{className:"inner"},
+      st.picked ? h("button",{className:"btn big green", onClick:next}, st.n+1>=SERVICE.length? "See my report card \u2192" : "Next guest line \u2192")
+                : h("button",{className:"btn big", disabled:true},"Choose your reply"))));
+}
+
+/* ---------------------------------------------------------- PATH SCREEN */
+
+function PathScreen(p){
+  var st = p.st;
+  var order = LESSONS.slice();
+  function unlocked(idx){
+    if(idx===0) return true;
+    return !!st.done[order[idx-1].id];
+  }
+  var allDone = order.every(function(L){ return !!st.done[L.id]; });
+  var firstOpen = -1;
+  for(var k=0;k<order.length;k++){ if(!st.done[order[k].id] && unlocked(k)){ firstOpen = k; break; } }
+
+  var rows = [], lastUnit = 0;
+  order.forEach(function(L, idx){
+    if(L.unit !== lastUnit){
+      lastUnit = L.unit;
+      var U = UNITS[L.unit];
+      rows.push(h("div",{key:"u"+L.unit, className:"unitbar", style:{background:U.col}},
+        h("div",{style:{flex:1}}, h("b",{style:{fontFamily:"Fredoka", fontSize:"20px"}}, U.name),
+          h("div",{style:{fontSize:"14px", opacity:.9}}, U.it)),
+        h(Mascot,{who: L.unit===2?"chef":(L.unit===3?"host":"waitress"), mood:"happy", size:56})));
+    }
+    var open = unlocked(idx), done = st.done[L.id];
+    var off = [0,60,90,60,0,-60,-90,-60][idx % 8];
+    rows.push(
+      h("div",{key:L.id, className:"nodewrap", style:{transform:"translateX("+(off/2)+"px)"}},
+        h("div",{style:{position:"relative"}},
+          idx===firstOpen ? h("div",{className:"startflag"}, done? "REVIEW" : "START") : null,
+          h("button",{className:"node"+(open?"":" locked")+(idx===firstOpen?" bounce":""),
+            style:{"--ncol":"var(--"+L.col+")", "--nedge":"var(--"+L.col+"-edge)"},
+            onClick:function(){ if(open) p.onOpen(L); },
+            "aria-label":L.title+(open?"":" (locked)")},
+            h("span",{className:"emoji"}, open? L.icon : "\uD83D\uDD12"),
+            done ? h("span",{className:"crowns"}, "\u2B50 "+done.crowns) : null)),
+        h("div",{className:"nodelabel"}, h("b",null, L.title), L.it)
+      ));
+  });
+
+  rows.push(h("div",{key:"boss", className:"nodewrap", style:{marginTop:"10px"}},
+    h("button",{className:"node"+(allDone?"":" locked")+(allDone?" pulse":""),
+      style:{"--ncol":"var(--yellow)", "--nedge":"var(--yellow-edge)", width:"104px", height:"98px"},
+      onClick:function(){ if(allDone) p.onBoss(); }, "aria-label":"Boss level"},
+      h("span",{className:"emoji"}, allDone? "\uD83D\uDC51" : "\uD83D\uDD12")),
+    h("div",{className:"nodelabel"}, h("b",null,"Boss level: the full service"),
+      allDone? "A demanding guest is waiting at table nine. Serve them in English." : "Finish all ten lessons to unlock.")));
+
+  return h("div",{className:"wrap"},
+    h("div",{className:"card", style:{marginTop:"18px", borderColor:"var(--green)", background:"var(--bg-2)"}},
+      h("div",{className:"row"},
+        h(Mascot,{who:"waitress", mood: st.streak>0 ? "excited":"happy", size:84}),
+        h("div",{style:{flex:1}},
+          h("b",{style:{fontFamily:"Fredoka", fontSize:"20px"}}, st.name? "Welcome back, "+st.name+"!" : "Welcome to your shift!"),
+          h("p",{className:"small", style:{margin:"4px 0 8px"}},
+            st.streak>0 ? "Day "+st.streak+" of your streak. Ten minutes today keeps it alive."
+                        : "Finish one lesson today to start your streak."),
+          h("div",{className:"row"},
+            h("div",{style:{flex:1}}, h(Bar,{pct: (Object.keys(st.done).length/LESSONS.length)*100})),
+            h("span",{className:"small muted"}, Object.keys(st.done).length+"/"+LESSONS.length))))),
+    h("div",{className:"path"}, rows),
+    h("div",{style:{height:"20px"}})
+  );
+}
+
+/* ---------------------------------------------------------- LEAGUE (leaderboard) */
+
+var PRACTICE_LEAGUE = [
+  {name:"Giulia (practice)", xp:940, bot:true}, {name:"Matteo (practice)", xp:770, bot:true},
+  {name:"Sofia (practice)", xp:610, bot:true}, {name:"Luca (practice)", xp:430, bot:true},
+  {name:"Chiara (practice)", xp:265, bot:true}, {name:"Alessio (practice)", xp:120, bot:true}
+];
+function snapRows(snap){
+  var out = [];
+  var list = (snap && (snap.docs || snap.documents)) || (Array.isArray(snap)? snap : []);
+  for(var i=0;i<list.length;i++){
+    var d = list[i];
+    var data = (d && typeof d.data === "function") ? d.data() : (d && d.data) || d;
+    if(data && data.name) out.push({name:String(data.name).slice(0,24), xp:Number(data.xp)||0});
+  }
+  return out;
+}
+function LeagueScreen(p){
+  var R = useState(null), rows = R[0], setRows = R[1];
+  var E = useState(false), live = E[0], setLive = E[1];
+  useEffect(function(){
+    var alive = true;
+    if(!CAP.db){ setRows(null); return; }
+    try{
+      CAP.db.collection("leaderboard").get().then(function(snap){
+        if(!alive) return;
+        var r = snapRows(snap);
+        setRows(r); setLive(true);
+      }, function(){ if(alive) setRows(null); });
+    }catch(e){ setRows(null); }
+    return function(){ alive = false; };
+  },[]);
+  var me = {name: p.st.name || "You", xp: p.st.xp, me:true};
+  var board = (rows && rows.length ? rows.filter(function(r){ return r.name !== me.name; }) : PRACTICE_LEAGUE.slice()).concat([me]);
+  board.sort(function(a,b){ return b.xp - a.xp; });
+  var medals = ["\uD83E\uDD47","\uD83E\uDD48","\uD83E\uDD49"];
+  return h("div",{className:"wrap"},
+    h("h1",{style:{margin:"22px 0 2px"}},"The Service League"),
+    h("p",{className:"muted small", style:{marginTop:0}},
+      live ? "Live board: everyone using this app in your group." : "Practice league (offline). Your real classmates appear here when the shared board is available."),
+    h("div",{className:"card", style:{marginTop:"14px"}},
+      board.slice(0,12).map(function(r, n){
+        return h("div",{key:r.name+n, className:"row", style:{padding:"10px 4px", borderBottom:"2px solid var(--line)",
+          background: r.me? "color-mix(in srgb, var(--yellow) 20%, transparent)":"transparent", borderRadius:"12px"}},
+          h("span",{style:{width:"34px", fontFamily:"Fredoka", fontSize:"18px"}}, medals[n] || (n+1)),
+          h("span",{style:{flex:1}}, r.me ? h("b",null, r.name+" (you)") : r.name),
+          h("b",{style:{fontFamily:"Fredoka"}}, r.xp+" XP"));
+      })),
+    !p.st.name ? h("div",{className:"card", style:{marginTop:"14px"}},
+      h("b",null,"Add your name to the board"),
+      h("input",{type:"text", placeholder:"e.g. Francesca", style:{marginTop:"8px"},
+        onKeyDown:function(e){ if(e.key==="Enter" && e.target.value.trim()) p.onName(e.target.value.trim()); }}),
+      h("p",{className:"small muted"},"Press Enter to save. Your classmates will see this name and your XP.")) : null,
+    h("div",{style:{height:"30px"}})
+  );
+}
+
+/* ---------------------------------------------------------- PROFILE / BADGES */
+
+function ProfileScreen(p){
+  var st = p.st, lv = levelFor(st.xp);
+  var floorX = levelFloor(lv), ceilX = levelCeil(lv);
+  var pct = Math.min(100, ((st.xp - floorX) / Math.max(1,(ceilX - floorX))) * 100);
+  return h("div",{className:"wrap"},
+    h("div",{className:"card", style:{marginTop:"18px", textAlign:"center"}},
+      h(Mascot,{who:"host", mood:"happy", size:130}),
+      h("h2",{style:{marginTop:"6px"}}, st.name || "Your profile"),
+      h("div",{className:"row", style:{justifyContent:"center", flexWrap:"wrap", margin:"8px 0"}},
+        h(Pill,{bg:"var(--yellow)"}, "\u2B50 Level "+lv),
+        h(Pill,{bg:"var(--tomato)", fg:"#fff"}, "\uD83D\uDD25 "+st.streak+"-day streak"),
+        h(Pill,{bg:"var(--green)"}, st.xp+" XP")),
+      h("div",{className:"xpbar", style:{margin:"10px 0 4px"}}, h("div",{style:{width:pct+"%"}})),
+      h("p",{className:"small muted"}, (ceilX-st.xp)+" XP to level "+(lv+1)),
+      h("input",{type:"text", defaultValue:st.name, placeholder:"Your name for the league", style:{marginTop:"10px"},
+        onBlur:function(e){ if(e.target.value.trim()) p.onName(e.target.value.trim()); }})),
+    h("h2",{style:{margin:"24px 0 10px"}},"Achievements"),
+    h("div",{className:"grid", style:{gridTemplateColumns:"repeat(auto-fill,minmax(140px,1fr))"}},
+      BADGES.map(function(b){
+        var got = st.badges.indexOf(b.id)>=0;
+        return h("div",{key:b.id, className:"badge"+(got?"":" off")},
+          h("div",{className:"ico"}, b.ico), h("b",null,b.name), h("span",{className:"muted"}, b.desc));
+      })),
+    h("h2",{style:{margin:"24px 0 10px"}},"Media check"),
+    h(MediaCheck,null),
+    h("h2",{style:{margin:"24px 0 10px"}},"Sound"),
+    h("div",{className:"card"}, h(VoicePicker,null)),
+    h("h2",{style:{margin:"24px 0 10px"}},"Progress"),
+    h("div",{className:"card"},
+      LESSONS.map(function(L){
+        var d = st.done[L.id];
+        return h("div",{key:L.id, className:"row", style:{padding:"6px 0"}},
+          h("span",{style:{fontSize:"22px", width:"34px"}}, L.icon),
+          h("span",{style:{flex:1}}, L.title),
+          h("span",{className:"small muted"}, d? ("\u2B50 "+d.crowns+" \u00B7 "+d.best+"%") : "locked / not started"));
+      }),
+      h("button",{className:"btn tiny ghost", style:{marginTop:"12px"}, onClick:function(){
+        if(window.confirm("Reset all your progress? This cannot be undone.")) p.onReset();
+      }},"Reset progress")),
+    h("div",{style:{height:"30px"}})
+  );
+}
+
+/* ---------------------------------------------------------- BOSS LEVEL (AI guest) */
+
+var BOSS_RULES =
+ "ROLE-PLAY. You are a restaurant GUEST in an English-speaking restaurant. The person writing to you is an ITALIAN waiter practising service English at CEFR B1.\n"+
+ "Rules: stay in character as the guest; never break role; never write in Italian. Keep each reply SHORT (1-3 sentences), natural and spoken.\n"+
+ "You are demanding but polite: you ask about ingredients, you have a nut allergy, you change your drink order once, you ask for a recommendation, and at the end you ask for the bill and whether service is included.\n"+
+ "Move the meal forward one step per turn: greeting -> drinks -> starter -> main -> problem with the dish -> dessert/coffee -> the bill -> goodbye.\n"+
+ "If the waiter's English is unclear, ask them to repeat, as a real guest would. Never correct their grammar during the role-play.\n"+
+ "Start now: you have just sat down at table nine.";
+
+function BossScreen(p){
+  var T = useState([]), turns = T[0], setTurns = T[1];
+  var In = useState(""), input = In[0], setInput = In[1];
+  var B = useState({busy:false, err:"", done:null}), bs = B[0], setBs = B[1];
+  var boxRef = useRef(null);
+  useEffect(function(){ if(boxRef.current) boxRef.current.scrollTop = boxRef.current.scrollHeight; },[turns, bs.busy]);
+
+  if(!CAP.sample) return h(OfflineBoss,{onExit:p.onExit, onWin:p.onWin});
+
+  function send(text){
+    if(!text.trim() || bs.busy) return;
+    var mine = turns.concat([{role:"user", content:text.trim()}]);
+    setTurns(mine); setInput(""); setBs({busy:true, err:"", done:null});
+    var msgs = [{role:"user", content:BOSS_RULES}].concat(mine);
+    CAP.sample(msgs, {cache:false, modelTier:"quick"}).then(function(res){
+      setTurns(mine.concat([{role:"assistant", content:res.text}]));
+      setBs({busy:false, err:"", done:null});
+    }).catch(function(e){
+      setBs({busy:false, err: e && e.code==="rate_limited" ? "Too many messages at once - wait a moment." : "The guest went quiet. Try sending that again.", done:null});
+    });
+  }
+  function finish(){
+    setBs({busy:true, err:"", done:null});
+    var script = turns.map(function(t){ return (t.role==="user"?"WAITER: ":"GUEST: ")+t.content; }).join("\n");
+    var prompt = "You are an English teacher assessing an Italian waiter's service English (CEFR B1) from this role-play transcript.\n\n"+
+      script+"\n\nReply with ONLY this JSON: "+
+      '{"score": 0-100, "good": "one sentence on what worked, in simple English", "fix": ["short correction 1","short correction 2","short correction 3"], "phrase": "one better phrase they should steal for next time"}';
+    CAP.sample.json(prompt, {modelTier:"default"}).then(function(d){
+      var sc = Math.max(0, Math.min(100, Number(d && d.score)||60));
+      setBs({busy:false, err:"", done:{score:sc, good:(d&&d.good)||"", fix:(d&&d.fix)||[], phrase:(d&&d.phrase)||""}});
+      confetti(140); beep("win");
+      p.onWin(sc);
+    }).catch(function(){
+      setBs({busy:false, err:"The report card did not arrive. Try again.", done:null});
+    });
+  }
+
+  return h("div",null,
+    h("div",{className:"topbar noprint"}, h("div",{className:"inner"},
+      h("button",{className:"btn tiny ghost", onClick:p.onExit},"\u2715"),
+      h("b",{style:{fontFamily:"Fredoka"}},"Table nine \u00B7 live service"),
+      h("span",{className:"stat", style:{marginLeft:"auto"}}, "\uD83D\uDCAC ", h("span",{className:"num"}, turns.filter(function(t){return t.role==="user";}).length)))),
+    h("div",{className:"wrap"},
+      h("div",{className:"card", style:{marginTop:"16px", background:"var(--bg-2)"}},
+        h("div",{className:"row"},
+          h(Mascot,{who:"chef", mood:"menace", size:80}),
+          h("div",null, h("b",null,"Your shift starts now."),
+            h("p",{className:"small", style:{margin:"4px 0 0"}},"Greet the guest, take the order, handle the problem, bring the bill. Write in English. When the meal is over, tap Finish the service for your report card.")))),
+      h("div",{ref:boxRef, className:"card", style:{marginTop:"14px", maxHeight:"52vh", overflowY:"auto"}},
+        turns.length===0 ? h("p",{className:"muted"},"Say hello to start the service. For example: Good evening, welcome to Trattoria Da Nonna.") : null,
+        turns.map(function(t,n){
+          return h("div",{key:n, className:"bubble "+(t.role==="user"?"me":"guest")},
+            h("div",{className:"small muted"}, t.role==="user"? "You (waiter)" : "Guest"),
+            t.content);
+        }),
+        bs.busy && !bs.done ? h("div",{className:"bubble guest"}, h("span",{className:"muted"},"The guest is thinking...")) : null),
+      bs.err ? h("p",{style:{color:"var(--rose)"}}, bs.err) : null,
+      bs.done ? h("div",{className:"card pop", style:{marginTop:"14px", borderColor:"var(--yellow)"}},
+        h("h2",null,"Report card: ", h("span",{style:{color:"var(--green)"}}, bs.done.score+"/100")),
+        bs.done.good ? h("p",null, "\u2705 "+bs.done.good) : null,
+        (bs.done.fix||[]).map(function(f,n){ return h("p",{key:n, className:"small"}, "\uD83D\uDD27 "+f); }),
+        bs.done.phrase ? h("p",{className:"card", style:{background:"var(--bg-2)"}}, "\u2B50 Steal this phrase: ", h("b",null, bs.done.phrase)) : null,
+        h("button",{className:"btn big green", style:{marginTop:"10px"}, onClick:p.onExit},"Back to the path \u2192")
+      ) : null,
+      h("div",{style:{height:"30px"}})),
+    !bs.done ? h("div",{className:"footerbar"}, h("div",{className:"inner"},
+      h("input",{type:"text", value:input, placeholder:"Type what you say to the guest...",
+        onChange:function(e){ setInput(e.target.value); },
+        onKeyDown:function(e){ if(e.key==="Enter") send(input); }}),
+      h("button",{className:"btn green", disabled:bs.busy || !input.trim(), onClick:function(){ send(input); }},"Send"),
+      turns.length>=6 ? h("button",{className:"btn yellow", disabled:bs.busy, onClick:finish},"Finish") : null)) : null
+  );
+}
+
+/* ---------------------------------------------------------- PHRASEBOOK (printable) */
+
+function Phrasebook(p){
+  var K = useState(false), showKey = K[0], setShowKey = K[1];
+  return h("div",{className:"wrap"},
+    h("div",{className:"row", style:{marginTop:"20px", flexWrap:"wrap"}},
+      h("div",{style:{flex:1, minWidth:"220px"}},
+        h("h1",{style:{margin:0}},"Your service phrasebook"),
+        h("p",{className:"muted small", style:{marginTop:"4px"}},"Every phrase in the app, English and Italian. Print it and keep it in your apron.")),
+      h("button",{className:"btn tomato noprint", onClick:function(){ window.print(); }},"\u2B07 Descargar / Guardar PDF")),
+    LESSONS.map(function(L){
+      return h("div",{key:L.id, className:"card", style:{marginTop:"16px"}},
+        h("div",{className:"row"},
+          h("span",{style:{fontSize:"26px"}}, L.icon),
+          h("div",null, h("b",{style:{fontFamily:"Fredoka", fontSize:"19px"}}, L.title),
+            h("div",{className:"muted small"}, L.it))),
+        h("table",{className:"pb", style:{marginTop:"10px"}},
+          h("thead",null, h("tr",null, h("th",null,"English"), h("th",null,"Italiano"), h("th",{className:"noprint"},"Listen"))),
+          h("tbody",null, L.phrases.map(function(x,n){
+            return h("tr",{key:n},
+              h("td",null, x.en), h("td",null, x.it),
+              h("td",{className:"noprint"}, h("button",{className:"btn tiny sky", onClick:function(){ ttsSpeak(x.en, 0.85); }},"\uD83D\uDD0A")));
+          }))));
+    }),
+    h("div",{className:"card noprint", style:{marginTop:"20px", borderColor:"var(--grape)"}},
+      h("button",{className:"btn tiny grape", onClick:function(){ setShowKey(!showKey); }},
+        showKey? "Hide teacher answer key" : "\uD83D\uDD11 Teacher answer key"),
+      showKey ? h("div",{className:"answerkey", style:{marginTop:"12px"}},
+        LESSONS.map(function(L){
+          return h("div",{key:L.id, style:{marginBottom:"12px"}},
+            h("b",null, L.title),
+            L.ex.map(function(ex,n){
+              var a = ex.t==="match" ? ex.pairs.map(function(pr){ return pr[0]+" = "+pr[1]; }).join("; ")
+                    : ex.t==="speak" ? ex.say : answerText(ex);
+              return h("div",{key:n, className:"small muted"}, (n+1)+". "+a);
+            }));
+        })) : null),
+    h("div",{style:{height:"40px"}})
+  );
+}
+
+/* ---------------------------------------------------------- BADGES + PROGRESS RULES */
+
+function computeBadges(st){
+  var have = st.badges.slice(), add = [];
+  function give(id){ if(have.indexOf(id)<0){ have.push(id); add.push(id); } }
+  var doneIds = Object.keys(st.done);
+  if(doneIds.length>=1) give("first");
+  var anyPerfect = doneIds.some(function(k){ return st.done[k].best===100; });
+  if(anyPerfect) give("perfect");
+  if(st.streak>=3) give("streak3");
+  if(st.streak>=7) give("streak7");
+  if(st.heard>=10) give("ear");
+  if(st.spoken>=10) give("voice");
+  if(st.bingoWon) give("bingo");
+  if(st.menuSent) give("menu");
+  [1,2,3,4].forEach(function(u){
+    var all = LESSONS.filter(function(L){ return L.unit===u; }).every(function(L){ return !!st.done[L.id]; });
+    if(all) give("unit"+u);
+  });
+  if(levelFor(st.xp)>=5) give("lvl5");
+  if(st.xp>=1000) give("xp1000");
+  if(st.bossWon) give("boss");
+  st.badges = have;
+  return add.map(function(id){ for(var i=0;i<BADGES.length;i++){ if(BADGES[i].id===id) return BADGES[i]; } return null; }).filter(Boolean);
+}
+
+function pushScore(st){
+  if(!CAP.db || !st.name) return;
+  try{
+    var id = st.pid || ("p"+Math.random().toString(36).slice(2,10));
+    st.pid = id;
+    CAP.db.doc("leaderboard/"+id).set({name:st.name, xp:st.xp, level:levelFor(st.xp), at:Date.now()});
+  }catch(e){}
+}
+
+/* ---------------------------------------------------------- APP ROOT */
+
+function App(){
+  var S = useState(loadState), st = S[0], setSt = S[1];
+  var SC = useState({name:"path"}), scr = SC[0], setScr = SC[1];
+  var C = useState(0), caps = C[0], setCaps = C[1];
+
+  useEffect(function(){
+    initVoices(function(){});
+    bootCaps(function(){ setCaps(function(x){ return x+1; }); });
+  },[]);
+  useEffect(function(){ saveState(st); },[st]);
+
+  function update(fn){
+    setSt(function(old){
+      var n = JSON.parse(JSON.stringify(old));
+      fn(n);
+      return n;
+    });
+  }
+  function addXP(n){ update(function(s2){ s2.xp += n; computeBadges(s2); pushScore(s2); }); }
+
+  function finishLesson(L, r){
+    var acc = r.asked ? Math.round(r.right/r.asked*100) : 100;
+    var bonus = 20 + (r.perfect? 15 : 0);
+    var total = r.xp + bonus;
+    var fresh = [];
+    update(function(s2){
+      s2.xp += total;
+      var prev = s2.done[L.id];
+      s2.done[L.id] = {best: Math.max(acc, prev? prev.best:0), crowns: Math.min(3, (prev? prev.crowns:0)+1)};
+      var t = todayKey();
+      if(s2.lastDay !== t){
+        s2.streak = (s2.lastDay === yesterdayKey()) ? (s2.streak+1) : 1;
+        s2.lastDay = t;
+      }
+      L.ex.forEach(function(e){ if(e.t==="listen") s2.heard++; if(e.t==="speak") s2.spoken++; });
+      if(r.flags && r.flags.bingo) s2.bingoWon = true;
+      if(r.flags && r.flags.menu) s2.menuSent = true;
+      fresh = computeBadges(s2);
+      pushScore(s2);
+    });
+    setScr({name:"result", lesson:L, result:r, totalXP:total, newBadges:fresh});
+  }
+
+  var lv = levelFor(st.xp);
+  var nav = [["path","\uD83D\uDDFA","Path"],["league","\uD83C\uDFC6","League"],["book","\uD83D\uDCD6","Phrasebook"],["me","\uD83D\uDC64","You"]];
+
+  if(scr.name==="lesson")
+    return h(LessonScreen,{lesson:scr.lesson, onExit:function(){ setScr({name:"path"}); },
+      onFinish:function(r){ finishLesson(scr.lesson, r); }});
+
+  if(scr.name==="result")
+    return h(ResultScreen,{lesson:scr.lesson, result:scr.result, totalXP:scr.totalXP, newBadges:scr.newBadges,
+      onXP:addXP, onDone:function(){ setScr({name:"path"}); }});
+
+  if(scr.name==="boss")
+    return h(BossScreen,{onExit:function(){ setScr({name:"path"}); },
+      onWin:function(sc){ update(function(s2){ s2.bossWon = true; s2.xp += 60 + Math.round(sc/2); computeBadges(s2); pushScore(s2); }); }});
+
+  var page;
+  if(scr.name==="league") page = h(LeagueScreen,{st:st, onName:function(n){ update(function(s2){ s2.name = n; pushScore(s2); }); }});
+  else if(scr.name==="book") page = h(Phrasebook,null);
+  else if(scr.name==="me") page = h(ProfileScreen,{st:st,
+    onName:function(n){ update(function(s2){ s2.name = n; pushScore(s2); }); },
+    onReset:function(){ setSt(blankState()); }});
+  else page = h(PathScreen,{st:st, onOpen:function(L){ setScr({name:"lesson", lesson:L}); }, onBoss:function(){ setScr({name:"boss"}); }});
+
+  return h("div",null,
+    h("div",{className:"topbar noprint"},
+      h("div",{className:"inner"},
+        h("button",{className:"wordmark", onClick:function(){ setScr({name:"path"}); }, "aria-label":"TAVOLA home"}, h(Wordmark,{size:30})),
+        h("span",{className:"stat", title:"streak"},"\uD83D\uDD25 ", h("span",{className:"num"}, st.streak)),
+        h("span",{className:"stat", title:"experience"},"\u26A1 ", h("span",{className:"num"}, st.xp)),
+        h("span",{className:"stat", title:"level"},"\u2B50 ", h("span",{className:"num"}, lv))
+      )),
+    page,
+    h("div",{className:"footerbar noprint"},
+      h("div",{className:"inner", style:{justifyContent:"space-around"}},
+        nav.map(function(n){
+          var on = (scr.name===n[0]) || (scr.name==="path" && n[0]==="path");
+          return h("button",{key:n[0], className:"btn tiny"+(on?" green":" ghost"), onClick:function(){ setScr({name:n[0]}); }},
+            h("span",{style:{fontSize:"18px"}}, n[1]), h("span",{className:"small"}, n[2]));
+        })))
+  );
+}
+
+var rootEl = document.getElementById("root");
+ReactDOM.createRoot(rootEl).render(h(App,null));
+window.addEventListener("resize", function(){
+  var cv = document.getElementById("confetti");
+  if(cv){ cv.width = window.innerWidth; cv.height = window.innerHeight; }
+});
+})();
+
+</script>
+</body>
+</html>
